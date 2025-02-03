@@ -1,7 +1,7 @@
 # IT342-KitchenPal
 
 Team Members:  
-Member1  
+Member1   
 NAME:Vicci Louise D. Agramon  
 COURSE & YEAR: BSIT - 4  
 
