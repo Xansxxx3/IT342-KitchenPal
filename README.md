@@ -1,8 +1,8 @@
 # IT342-KitchenPal
 
 Team Members:  
-Member1  
-NAME:Vicci Louise D. Agramon  
-COURSE & YEAR: BSIT - 4  
+Member3  
+NAME:Jude Anthony L. Bagarinao  
+COURSE & YEAR: BSIT - 3  
 
-I am a young and handsome bachelor. My dream is to become a developer and make a name for myself in the industry. I want to be able to create viable programs that are innovative and are progressive towards the future. I like to spend my time practicing and honing my programming skills. I am also into music.
+I am simple man who want to accomplish my dreams. My dream is to get a good job in industry and a good life that i am proud off. I am a hardworking and determined person who strives to achieve my goals. I am passionate about technology and how it can be used to solve real-world problems. I believe that success comes from continuous effort, resilience, and the willingness to adapt.
