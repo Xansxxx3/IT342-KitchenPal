@@ -1,8 +1,8 @@
 # IT342-KitchenPal
 
 Team Members:  
-Member1  
-NAME:Vicci Louise D. Agramon  
-COURSE & YEAR: BSIT - 4  
+Member2  
+NAME:Edgar Quindao Jr. 
+COURSE & YEAR: BSIT - 3 
 
-I am a young and handsome bachelor. My dream is to become a developer and make a name for myself in the industry. I want to be able to create viable programs that are innovative and are progressive towards the future. I like to spend my time practicing and honing my programming skills. I am also into music.
+I am a young and handsome guy. My dream is to become a rich person and enjoy life as much as I can. I also want to be a succcessful developer in the near future. Im also into investing and making money overall and being a developer will be my sideline
