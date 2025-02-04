@@ -1,3 +1,5 @@
+# IT342-KitchenPal
+
 Team Members:
 
 Member3
