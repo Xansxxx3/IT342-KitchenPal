@@ -6,12 +6,17 @@
 KitchenPal aims to transform kitchen management by providing an all-in-one solution for inventory management, meal planning, and grocery shopping. It helps users track ingredients, plan meals, and generate grocery lists automatically, making daily meal preparation more efficient. The application is designed to streamline kitchen organizations, optimize food usage, and promote healthier eating habits, empowering users to make informed decisions and save time. 
 
 ## List of Features:
-User Authentication – The process of verifying a user's identity through login credentials (e.g., email, social media accounts like Google or Facebook).
-Recipe Database (CRUD Operations) – A system that allows users to create, read, update, and delete recipes. Recipes consist of ingredients, preparation instructions, and photos.
-Meal Planner – A feature of KitchenPal that helps users plan meals by selecting recipes based on their available ingredients and desired meal types.
-Grocery Shopping Assistance – A feature that generates grocery shopping lists from the user’s planned meals and allows users to track which items have been purchased.
-Recipe Sharing and Community Features – A social interaction feature where users can share their recipes, comment, like, and follow other users.
-Push Notifications – Messages sent to users' mobile or web devices to notify them about meal 
+Recipe Database (CRUD Operations): Admin can create, read, update, and delete recipes, including adding recipe, instructions, and photos.
+
+Meal Planner: Enables users to plan meals for the week, selecting recipes and organizing their cooking schedule. 
+
+Grocery Shopping assistance: Helps users plan and organize their grocery shopping by generating shopping lists based on planned recipes and allows users to track items as they are purchased, ensuring a smooth and efficient shopping experience. 
+
+Community Recipe Features: Provides a platform for users to like and comment on recipes.
+
+Push Notifications for Mobile: Sends reminders for planned meals, grocery shopping, and new recipe suggestions.
+
+Profile Management: Allows users to create and manage their personal profiles, including details such as name, password, profile picture.
 
 
 ## Links:
