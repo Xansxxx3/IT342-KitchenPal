@@ -18,6 +18,28 @@ Push Notifications for Mobile: Sends reminders for planned meals, grocery shoppi
 
 Profile Management: Allows users to create and manage their personal profiles, including details such as name, password, profile picture.
 
+## Installation/How to run the program
+
+1. Open this link ,click code and download Zip
+```bash
+https://github.com/Xansxxx3/IT342-KitchenPal
+```
+2. Unzip it and open the folder with vscode or intellij 
+
+3. setup and open your sql workbench beforehand 
+
+4. open your backend to terminal and type
+```bash
+mvn spring-boot:run
+```
+5. 2nd Step. open your frontend to terminal and type this to install dependencies
+```bash
+npm install
+```
+6. to run the frontend type
+```bash
+npm start
+```
 
 ## Links:
 
