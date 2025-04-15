@@ -1,0 +1,150 @@
+/* General styling for the recipe container */
+.recipe-container {
+  background-image: url('../assets/leafbg.png');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+}
+
+/* Header styling */
+.recipe-header {
+  position: absolute;
+  top: 0%;
+  width: 100%;
+  height: 3.5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  background-color: #FEFF9F;
+}
+
+.home-logo {
+  width: 150px;
+}
+
+.home-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.home-nav-link {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #A0D683;
+  color: #333;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home-nav-link:hover {
+  background-color: #98c978;
+}
+
+/* Recipe content styling */
+.recipe-content {
+  padding-top: 100px;
+  text-align: center;
+}
+
+.recipe-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* Recipe grid styling */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.recipe-card {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.3s ease;
+}
+
+.recipe-card:hover {
+  transform: scale(1.05);
+}
+
+.recipe-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.recipe-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Dropdown button styling */
+.dropdown-button {
+  width: 60px; /* Adjust the size as needed */
+  height: 60px;
+  background-color: #A0D683; /* Light green background color */
+  padding: -10px; /* Space around the icon inside the background */
+  border-radius: 20%; /* Rounded shape */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Optional shadow for depth */
+  margin-right: 25px; /* Space from the right side of the navigation bar */
+}
+
+/* Profile dropdown container */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Position the dropdown below the User Profile button */
+  right: 0;
+  background-color: #FEFF9F;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+  min-width: 150px;
+  padding: 10px 0;
+}
+
+/* Dropdown item styling */
+.dropdown-item {
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  font-size: 1rem;
+  background-color: #FEFF9F;
+}
+
+/* Dropdown item hover effect */
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
