@@ -45,7 +45,7 @@ npm start
 
 ### Figma: https://www.figma.com/design/NKFv86GBzzRu3UmIZ8ZZ8z/KitchenPal?node-id=0-1&t=x51oG5ZMmYsucvVE-1
 
-### Diagram: file:///C:/Users/L14Y18W32/Downloads/Diagram%20KitchenPal.pdf
+### Diagram: https://cebuinstituteoftechnology-my.sharepoint.com/:w:/g/personal/judeanthony_bagarinao_cit_edu/ETwRnpr0dR9Jv_jB-K4MvnIB-HJnlsEIifZBBzJE0W7zwg?e=fwXBRb
 
 ## Developers Profile:
 
