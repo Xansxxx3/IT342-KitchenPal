@@ -1,0 +1,146 @@
+/* General styling for the home container */
+.home-container {
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+}
+
+/* Header container */
+.home-header {
+  position: absolute;
+  top: 0%;
+  width: 100%;
+  height: 3.5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  background-color: #FEFF9F; /* Light yellow background color */
+}
+
+/* Logo styling, clickable to go to the home page */
+.home-logo-link {
+  display: inline-block;
+}
+
+.home-logo {
+  width: 150px;
+  cursor: pointer;
+}
+
+/* Navigation bar styling (now in a row) */
+.home-nav {
+  display: flex;
+  gap: 20px;
+  margin-right: 20px;
+}
+
+/* Navigation links */
+.home-nav-link {
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  background-color: #A0D683; /* Light yellow background color */
+  color: #333; /* Dark text for contrast */
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home-nav-link:hover {
+  background-color: #A0D683; /* Slightly darker yellow on hover */
+}
+
+/* Welcome text styling */
+.home-content {
+  text-align: center;
+}
+
+.home-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.home-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+/* Log out button styling */
+.home-logout-btn {
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  background-color: #ff5733;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home-logout-btn:hover {
+  background-color: #e94c2e;
+}
+
+/* Dropdown button styling */
+.dropdown-button {
+  width: 60px; /* Adjust the size as needed */
+  height: 60px;
+  background-color: #A0D683; /* Light green background color */
+  padding: -10px; /* Space around the icon inside the background */
+  border-radius: 20%; /* Rounded shape */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Optional shadow for depth */
+  margin-right: 25px; /* Space from the right side of the navigation bar */
+}
+
+/* Profile dropdown container */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Position the dropdown below the User Profile button */
+  right: 0;
+  background-color: #FEFF9F;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+  min-width: 150px;
+  padding: 10px 0;
+}
+
+/* Dropdown item styling */
+.dropdown-item {
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  font-size: 1rem;
+  background-color: #FEFF9F;
+}
+
+/* Dropdown item hover effect */
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
