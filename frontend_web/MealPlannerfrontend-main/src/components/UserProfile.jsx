@@ -24,6 +24,7 @@ const UserProfile = () => {
         fname: "",
         lname: "",
         email: "",
+        profileImage: "",
     });
 
     const [passwordData, setPasswordData] = useState({
@@ -33,6 +34,40 @@ const UserProfile = () => {
 
     const [message, setMessage] = useState("");
     const [passwordMessage, setPasswordMessage] = useState("");
+
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageChange = (e) => {
+        setSelectedImage(e.target.files[0]);
+    };const handleImageUpload = async () => {
+          if (!selectedImage) return;
+
+          const formData = new FormData();
+          formData.append("image", selectedImage);
+
+          try {
+              const response = await axios.post(
+                  "http://localhost:8080/api/v1/user/upload-image", // updated endpoint
+                  formData,
+                  {
+                      headers: {
+                          Authorization: `Bearer ${localStorage.getItem("token")}`, // backticks added
+                          "Content-Type": "multipart/form-data",
+                      },
+                  }
+              );
+
+              console.log("Upload response:", response.data); // check what comes back
+
+              setProfile((prev) => ({
+                  ...prev,
+                  profileImage: response.data.fileName, // ⬅️ save new image filename
+              }));
+          } catch (error) {
+              console.error("Error uploading image", error);
+          }
+      };
+
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -50,7 +85,17 @@ const UserProfile = () => {
                     },
                 });
 
-                setProfile(response.data);
+                const user = response.data;
+
+                // 🟢 Safely extract just the filename from profileImagePath
+                setProfile({
+                    fname: user.fname,
+                    lname: user.lname,
+                    email: user.email,
+                    profileImage: user.profileImagePath
+                        ? user.profileImagePath.split("/").pop()
+                        : "",
+                });
             } catch (error) {
                 setMessage("Error fetching profile data.");
             }
@@ -58,6 +103,7 @@ const UserProfile = () => {
 
         fetchUserProfile();
     }, []);
+
 
     const handleProfileChange = (e) => {
         const { name, value } = e.target;
@@ -88,10 +134,10 @@ const UserProfile = () => {
                     },
                 }
             );
-            console.log(response.data); 
+            console.log(response.data);
             setMessage("Profile updated successfully!");
         } catch (error) {
-            console.error(error.response || error.message); 
+            console.error(error.response || error.message);
             setMessage(error.response?.data?.message || "Error updating profile.");
         }
     };
@@ -109,18 +155,18 @@ const UserProfile = () => {
                     },
                 }
             );
-            console.log(response.data); 
+            console.log(response.data);
             setPasswordMessage("Password updated successfully!");
             setPasswordData({
                 currentPassword: "",
                 newPassword: "",
-            }); 
+            });
         } catch (error) {
-            console.error(error.response || error.message); 
+            console.error(error.response || error.message);
             setPasswordMessage(error.response?.data?.message || "Error updating password.");
         }
     };
-    
+
         return (
             <div>
             {/* NavBar Component */}
@@ -138,6 +184,31 @@ const UserProfile = () => {
             >
                 {/* Profile and Password Forms */}
                 <div className="profile-container">
+                    <div className="profile-image-section">
+                        <label htmlFor="profileImageUpload" className="profile-image-wrapper">
+                            <img
+                              src={
+                                profile.profileImage
+                                  ? `http://localhost:8080/uploads/${profile.profileImage}`
+                                  : "https://via.placeholder.com/150?text=Profile"
+                              }
+                              alt="Profile"
+                              className="profile-image"
+                            />
+
+                            <input
+                                id="profileImageUpload"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                style={{ display: "none" }}
+                            />
+                        </label>
+                        <button type="button" onClick={handleImageUpload} className="upload-btn">
+                            Upload Image
+                        </button>
+                    </div>
+
                     <h2>Edit Profile</h2>
                     {message && <p className="message">{message}</p>}
                     <form onSubmit={handleProfileSubmit} className="profile-form">
