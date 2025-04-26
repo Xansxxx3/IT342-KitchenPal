@@ -62,20 +62,18 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         System.out.println("Full request URL: " + request.getRequestURL() + "?" + request.getQueryString());
     
         // Handle redirect
-        String redirectUri = request.getParameter("redirect_uri");
-        System.out.println("redirect URI: " + redirectUri);
-    
-        String redirectUrl;
-    
-        if (redirectUri != null && redirectUri.startsWith("myapp://")) {
-            System.out.println("Redirecting to mobile app...");
-            redirectUrl = redirectUri + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-        } else {
-            String webAppUrl = "https://it342-kitchenpal.onrender.com/oauth2-redirect";
-            System.out.println("Redirecting to web app...");
-            redirectUrl = webAppUrl + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-        }
-    
-        response.sendRedirect(redirectUrl);
+        String redirectUri = request.getParameter("state");
+    System.out.println("Redirect URI (from state): " + redirectUri);
+
+    String redirectUrl;
+
+    if (redirectUri != null && redirectUri.startsWith("myapp://")) {
+        redirectUrl = redirectUri + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
+    } else {
+        redirectUrl = "https://it342-kitchenpal.onrender.com/oauth2-redirect"
+            + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
     }
+
+    response.sendRedirect(redirectUrl);
+}
 }
