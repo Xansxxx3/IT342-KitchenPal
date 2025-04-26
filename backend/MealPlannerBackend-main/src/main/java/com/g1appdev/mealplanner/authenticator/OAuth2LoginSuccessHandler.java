@@ -1,8 +1,6 @@
 package com.g1appdev.mealplanner.authenticator;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
@@ -19,8 +17,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
-   @Component
+@Component
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final jwtService jwtUtil;
@@ -34,39 +31,48 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-        
+
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         System.out.println("OAuth2 User Attributes: " + oAuth2User.getAttributes());
+        
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("given_name");
-        System.out.println(name);
+        System.out.println("Authenticated user: " + name + " (" + email + ")");
 
         Optional<UserEntity> existingUser = userRepo.findByEmail(email);
         UserEntity user;
-if (existingUser.isPresent()) { 
-    user = existingUser.get();  
-} else {
-    user = new UserEntity();
-    user.setEmail(email);
-    user.setFName(name);
-    user.setRole(Role.USER);
-    userRepo.save(user);
-}
 
-        // Generate JWT token for this user
+        if (existingUser.isPresent()) {
+            user = existingUser.get();
+        } else {
+            user = new UserEntity();
+            user.setEmail(email);
+            user.setFName(name);
+            user.setRole(Role.USER);
+            userRepo.save(user);
+        }
+
+        // Generate JWT token
         String jwtToken = jwtUtil.generateToken(user);
+
+        // Set Authorization header (optional)
         response.setHeader("Authorization", "Bearer " + jwtToken);
+
+        // Handle redirect
+        String redirectUri = request.getParameter("redirect_uri");
         String redirectUrl;
 
-        
-        String redirectUri = request.getParameter("redirect_uri");
-if (redirectUri != null && redirectUri.startsWith("myapp://")) {
-    System.out.print("You tried the mobile");
-    redirectUrl = redirectUri + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-} else {
-    redirectUrl = "http://localhost:3000/oauth2-redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-}
-response.sendRedirect(redirectUrl);
-        
+        if (redirectUri != null && redirectUri.startsWith("myapp://")) {
+            // Mobile app login
+            System.out.println("Redirecting to mobile app...");
+            redirectUrl = redirectUri + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
+        } else {
+            // Web app login (your deployed Render frontend)
+            String webAppUrl = "https://it342-kitchenpal.onrender.com/oauth2-redirect";
+            System.out.println("Redirecting to web app...");
+            redirectUrl = webAppUrl + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
+        }
+
+        response.sendRedirect(redirectUrl);
     }
 }
