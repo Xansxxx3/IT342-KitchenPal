@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.g1appdev.mealplanner.entity.Role;
 import com.g1appdev.mealplanner.entity.UserEntity;
 import com.g1appdev.mealplanner.repository.UserRepository;
 import com.g1appdev.mealplanner.config.jwtService;
@@ -48,6 +49,7 @@ if (existingUser.isPresent()) {
     user = new UserEntity();
     user.setEmail(email);
     user.setFName(name);
+    user.setRole(Role.USER);
     userRepo.save(user);
 }
 
