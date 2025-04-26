@@ -61,6 +61,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         // Handle redirect
         String redirectUri = request.getParameter("redirect_uri");
         String redirectUrl;
+        System.out.println("redirect URI: " + redirectUri);
+
 
         if (redirectUri != null && redirectUri.startsWith("myapp://")) {
             // Mobile app login
