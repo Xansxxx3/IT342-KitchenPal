@@ -31,17 +31,17 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-
+    
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         System.out.println("OAuth2 User Attributes: " + oAuth2User.getAttributes());
         
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("given_name");
         System.out.println("Authenticated user: " + name + " (" + email + ")");
-
+    
         Optional<UserEntity> existingUser = userRepo.findByEmail(email);
         UserEntity user;
-
+    
         if (existingUser.isPresent()) {
             user = existingUser.get();
         } else {
@@ -51,30 +51,31 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             user.setRole(Role.USER);
             userRepo.save(user);
         }
-
+    
         // Generate JWT token
         String jwtToken = jwtUtil.generateToken(user);
-
+    
         // Set Authorization header (optional)
         response.setHeader("Authorization", "Bearer " + jwtToken);
-
+    
+        // Print full URL
+        System.out.println("Full request URL: " + request.getRequestURL() + "?" + request.getQueryString());
+    
         // Handle redirect
         String redirectUri = request.getParameter("redirect_uri");
-        String redirectUrl;
         System.out.println("redirect URI: " + redirectUri);
-
-
+    
+        String redirectUrl;
+    
         if (redirectUri != null && redirectUri.startsWith("myapp://")) {
-            // Mobile app login
             System.out.println("Redirecting to mobile app...");
             redirectUrl = redirectUri + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
         } else {
-            // Web app login (your deployed Render frontend)
             String webAppUrl = "https://it342-kitchenpal.onrender.com/oauth2-redirect";
             System.out.println("Redirecting to web app...");
             redirectUrl = webAppUrl + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
         }
-
+    
         response.sendRedirect(redirectUrl);
     }
 }
