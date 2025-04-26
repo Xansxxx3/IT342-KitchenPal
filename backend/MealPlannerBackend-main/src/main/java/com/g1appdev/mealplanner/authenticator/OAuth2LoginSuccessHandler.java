@@ -62,14 +62,15 @@ if (existingUser.isPresent()) {
         System.out.println("resp0nse: " + response);
 
         
-        String redirectUri = request.getParameter("redirect_uri");
-if (redirectUri != null && redirectUri.startsWith("myapp://")) {
-    System.out.print("You tried the mobile");
-    redirectUrl = redirectUri + "?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-} else {
-    redirectUrl = "http://localhost:3000/oauth2-redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-}
-response.sendRedirect(redirectUrl);
-        
+        String userAgent = request.getHeader("User-Agent");
+
+        if (userAgent != null && (userAgent.contains("Mobile") || userAgent.contains("Android") || userAgent.contains("iPhone"))) {
+            // Mobile device
+            redirectUrl = "myapp://oauth2redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
+        } else {
+            // Web client
+            redirectUrl = "http://localhost:3000/oauth2-redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
+        }
+        response.sendRedirect(redirectUrl);
     }
 }
