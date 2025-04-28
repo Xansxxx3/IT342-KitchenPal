@@ -20,8 +20,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.mealplanner.R
+
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.text.font.FontStyle
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
@@ -61,11 +65,11 @@ fun HomeScreen(navHostController: NavHostController) {
                     Image(
                         painter = painterResource(id = R.drawable.logo),
                         contentDescription = "Logo",
-                        modifier = Modifier.height(40.dp)
+                        modifier = Modifier.height(60.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(3.dp))
                     Text(
-                        text = "itchen Pal",
+                        text = "itchenPal",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -88,12 +92,7 @@ fun HomeScreen(navHostController: NavHostController) {
             }
 
             // Main content
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Welcome to the Home Screen!")
-            }
+            HomeContent();
         }
 
         // Footer Navigation Bar
@@ -116,18 +115,96 @@ fun HomeScreen(navHostController: NavHostController) {
                     selected = selectedItem == index,
                     onClick = { selectedItem = index
 
-                    when(index)
-                    {
-                        0 -> navHostController.navigate("settings")
-                        1 -> navHostController.navigate("meal plan")
-                        2 -> navHostController.navigate("home")
-                        3 -> navHostController.navigate("recipes")
-                        4 -> navHostController.navigate("shopping")
-                    }
+                        when(index)
+                        {
+                            0 -> navHostController.navigate("settings")
+                            1 -> navHostController.navigate("meal plan")
+                            2 -> navHostController.navigate("home")
+                            3 -> navHostController.navigate("recipes")
+                            4 -> navHostController.navigate("shopping")
+                        }
                     }
                 )
             }
 
+        }
+    }
+}
+
+@Composable
+private fun HomeContent() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),  // or .fillMaxSize()
+        contentAlignment = Alignment.Center
+    ) {
+        // semi-transparent card
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.8f)),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(0.9f)
+                .aspectRatio(0.7f)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                // logo + title
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Text(
+                        text = "itchenPal",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+
+                Spacer(Modifier.height(12.dp))
+                // divider line
+                Divider(color = Color.LightGray, thickness = 1.dp)
+
+                Spacer(Modifier.height(12.dp))
+                // body: text + image
+                Row {
+                    // description text
+                    Text(
+                        text = "KitchenPal makes meal preparation simple and efficient. " +
+                                "On our Recipe page, explore a wide variety of dishes and decide " +
+                                "how you want to organize your meals. With just a click, you " +
+                                "can add recipes directly to your Meal Plan to structure your " +
+                                "days or to your Shopping List to ensure you have all the " +
+                                "ingredients ready. Whether you’re planning meals for the day " +
+                                "or creating a grocery list, KitchenPal gives you the flexibility " +
+                                "to stay organized and focus on what matters most – enjoying " +
+                                "delicious meals!",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .weight(0.55f)
+                            .verticalScroll(rememberScrollState())
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    // dish image
+                    Image(
+                        painter = painterResource(id = R.drawable.plate_dish),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .weight(0.45f)
+                            .clip(RoundedCornerShape(8.dp))
+                            .fillMaxHeight()
+                    )
+                }
+            }
         }
     }
 }
