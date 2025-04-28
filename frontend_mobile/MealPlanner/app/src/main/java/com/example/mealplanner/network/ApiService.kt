@@ -3,6 +3,7 @@ package com.example.mealplanner.network
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 data class GreetingResponse(
@@ -32,6 +33,19 @@ data class LoginResponse(
     val userId: String
 )
 
+data class Recipe(
+    val id: Long,
+    val title: String,
+    val description: String,
+    val ingredients: String,
+    val prepTime: Int,
+    val nutritionInfo: String,
+    val cuisineType: String,
+    val mealType: String,
+    val ratingsAverage: Double,
+    val imagePath: String // this is the uploaded Cloudinary URL
+)
+
 interface ApiService {
     @GET("api/v1/user/print")
     suspend fun getGreeting(): Response<GreetingResponse>
@@ -41,4 +55,11 @@ interface ApiService {
 
     @POST("api/v1/auth/register")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
+
+    interface RecipeApi {
+        @GET("/api/recipe/allrecipe")
+        suspend fun getAllRecipes(
+            @Header("Authorization") token: String
+        ): List<Recipe>
+    }
 }
