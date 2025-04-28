@@ -1,5 +1,6 @@
 package com.example.mealplanner.network
 
+import android.R.attr.name
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -10,6 +11,7 @@ import com.example.mealplanner.ui.screens.SignInScreen
 import com.example.mealplanner.ui.screens.SignUpScreen
 import com.example.mealplanner.ui.screens.HomeScreen
 import com.example.mealplanner.ui.screens.MealPlanScreen
+import com.example.mealplanner.ui.screens.RecipeDetailScreen
 import com.example.mealplanner.ui.screens.RecipesScreen
 import com.example.mealplanner.ui.screens.SettingsScreen
 import com.example.mealplanner.ui.screens.ShoppingScreen
@@ -41,6 +43,10 @@ fun AppNavGraph(navController: NavHostController) {
         }
         composable("meal plan") {
             MealPlanScreen(navController) // This will be your meal plan screen
+        }
+        composable("recipeDetail/{name}") { backStackEntry ->
+            val recipeName = backStackEntry.arguments?.getString("name") ?: ""
+            RecipeDetailScreen(navController, recipeName = recipeName)
         }
         composable("recipes") {
             RecipesScreen(navController) // This will be your recipes screen
