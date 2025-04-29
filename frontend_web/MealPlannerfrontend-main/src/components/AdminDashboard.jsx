@@ -38,7 +38,7 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8080/api/v1/admin/users', {
+        const response = await axios.get('https://it342-kitchenpal.onrender.com/api/v1/admin/users', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setData(response.data);
@@ -57,7 +57,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:8080/api/v1/admin/users/${updatedUser.userId}`,
+        `https://it342-kitchenpal.onrender.com/api/v1/admin/users/${updatedUser.userId}`,
         updatedUser,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:8080/api/v1/admin/users/${id}`, {
+      await axios.delete(`https://it342-kitchenpal.onrender.com/api/v1/admin/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setData((prevData) => prevData.filter((user) => user.userId !== id));

@@ -14,6 +14,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,13 +39,9 @@ const Login = () => {
       const data = { email, password };
 
       const response = await axios.post(
-        'http://localhost:8080/api/v1/auth/authenticate',
+        `https://it342-kitchenpal.onrender.com/api/v1/auth/authenticate`,
         data,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
       console.log('Response data:', response.data); // Debugging line
@@ -148,7 +146,7 @@ const Login = () => {
         type="button"
         className="google-signin-btn"
         onClick={() => {
-          window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+          window.location.href = 'https://it342-kitchenpal.onrender.com/oauth2/authorization/google';
     }}
     >
     <img

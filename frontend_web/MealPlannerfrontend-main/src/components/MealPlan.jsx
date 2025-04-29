@@ -55,7 +55,7 @@ const MealPlan = () => {
         const token = localStorage.getItem("token");
   
         try {
-          const response = await axios.get(`http://localhost:8080/api/meal-plans/user/${userId}`, {
+          const response = await axios.get(`https://it342-kitchenpal.onrender.com/api/meal-plans/user/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -114,7 +114,7 @@ const MealPlan = () => {
   
     try {
       // Deleting the meal plan
-      await axios.delete(`http://localhost:8080/api/meal-plans/${selectedMealPlan.mealPlanId}`, {
+      await axios.delete(`https://it342-kitchenpal.onrender.com/api/meal-plans/${selectedMealPlan.mealPlanId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -230,9 +230,7 @@ const MealPlan = () => {
                         component="img"
                         height="140"
                         image={
-                          mealPlan.recipe?.imagePath
-                            ? `http://localhost:8080/api/recipe/images/${mealPlan.recipe.imagePath}`
-                            : "placeholder.jpg"
+                          mealPlan.recipe?.imagePath || "placeholder.jpg"
                         }
                         alt={mealPlan.recipe?.title || "Recipe Image"}
                       />
@@ -284,7 +282,7 @@ const MealPlan = () => {
             >
               <Box display="flex" flexDirection="row" gap="20px">
                 <img
-                  src={`http://localhost:8080/api/recipe/images/${selectedMealPlan.recipe.imagePath}`}
+                  src={`https://it342-kitchenpal.onrender.com/api/recipe/images/${selectedMealPlan.recipe.imagePath}`}
                   alt={selectedMealPlan.recipe.title}
                   style={{
                     borderRadius: "10px",
@@ -342,7 +340,7 @@ const MealPlan = () => {
                     const token = localStorage.getItem("token");
                     try {
                       await axios.put(
-                        `http://localhost:8080/api/meal-plans/share/${selectedMealPlan.mealPlanId}`,
+                        `https://it342-kitchenpal.onrender.com/api/meal-plans/share/${selectedMealPlan.mealPlanId}`,
                         {},
                         {
                           headers: { Authorization: `Bearer ${token}` },

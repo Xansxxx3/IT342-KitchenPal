@@ -14,7 +14,7 @@ const DishDialog = ({ open, handleClose, dish, userId }) => {
   const addToMealPlan = async () => {
     try {
     
-      const response = await axios.post("http://localhost:8080/api/meal-plans", {
+      const response = await axios.post("https://it342-kitchenpal.onrender.com/api/meal-plans", {
         user: {
           userId: userId, 
         },

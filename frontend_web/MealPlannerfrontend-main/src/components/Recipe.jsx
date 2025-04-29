@@ -40,7 +40,7 @@ const Recipe = () => {
     const fetchRecipes = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:8080/api/recipe/allrecipe', {
+        const response = await fetch('https://it342-kitchenpal.onrender.com/api/recipe/allrecipe', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,7 +87,7 @@ const Recipe = () => {
       }
 
       const mealPlanResponse = await fetch(
-        `http://localhost:8080/api/meal-plans/user/${userId}`,
+        `https://it342-kitchenpal.onrender.com/api/meal-plans/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -122,7 +122,7 @@ const Recipe = () => {
         recipeId: selectedRecipe.recipeId,
       };
 
-      const response = await fetch("http://localhost:8080/api/meal-plans/add", {
+      const response = await fetch("https://it342-kitchenpal.onrender.com/api/meal-plans/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +161,7 @@ const Recipe = () => {
 
       console.log('Adding to shopping list with:', { userId, recipeId: selectedRecipe.recipeId });
 
-      const response = await fetch('http://localhost:8080/api/shopping-list-items/add', {
+      const response = await fetch('https://it342-kitchenpal.onrender.com/api/shopping-list-items/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ const Recipe = () => {
                   <CardMedia
                     component="img"
                     height="200"
-                    image={`http://localhost:8080/api/recipe/images/${recipe.imagePath}`}
+                    image={recipe.imagePath}
                     alt={recipe.title}
                     sx={{
                       borderTopLeftRadius: '15px',
@@ -285,7 +285,7 @@ const Recipe = () => {
             {/* Modal content */}
             <Box display="flex" flexDirection="row" gap="20px">
               <img
-                src={`http://localhost:8080/api/recipe/images/${selectedRecipe.imagePath}`}
+                src={selectedRecipe.imagePath}
                 alt={selectedRecipe.title}
                 style={{
                   borderRadius: '10px',

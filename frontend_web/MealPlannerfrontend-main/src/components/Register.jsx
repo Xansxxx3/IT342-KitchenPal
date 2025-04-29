@@ -47,7 +47,7 @@ const Register = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/auth/register', data, {
+      const response = await axios.post('https://it342-kitchenpal.onrender.com/api/v1/auth/register', data, {
         headers: { 'Content-Type': 'application/json' },
       });
 
