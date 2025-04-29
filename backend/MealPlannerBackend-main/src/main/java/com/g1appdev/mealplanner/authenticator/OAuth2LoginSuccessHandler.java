@@ -72,7 +72,7 @@ if (existingUser.isPresent()) {
         //     // Web client
          
                redirectUrl = "https://it-342-kitchen-pal-53jd.vercel.app/oauth2-redirect?token=" 
-    + URLEncoder.encode(jwtToken, StandardCharsets.UTF_8)
+     + jwtToken
     + "&role=" + user.getRole()
     + "&userId=" + user.getUserId();
         // }
