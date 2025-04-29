@@ -97,6 +97,19 @@ public class MealplanService {
         }
         return false; // Return false if the meal plan was not found
     }
-    
+
+    public MealplanEntity updateCaption(Long mealPlanId, UserEntity currentUser, String newCaption) {
+        MealplanEntity mp = mealplanRepository.findById(mealPlanId)
+                .orElseThrow(() -> new RuntimeException("Meal plan not found"));
+
+        // enforce owner-only
+        if (mp.getUser().getUserId() != currentUser.getUserId()) {
+            throw new SecurityException("Cannot update caption of another user's meal plan");
+        }
+
+        mp.setCaption(newCaption);
+        return mealplanRepository.save(mp);
+    }
+
     
 }

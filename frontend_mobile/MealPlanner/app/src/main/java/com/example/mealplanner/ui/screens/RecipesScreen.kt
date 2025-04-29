@@ -99,9 +99,9 @@ fun RecipesScreen(navHostController: NavHostController) {
                         contentDescription = "Logo",
                         modifier = Modifier.height(40.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(3.dp))
                     Text(
-                        text = "itchen Pal",
+                        text = "itchenPal",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )

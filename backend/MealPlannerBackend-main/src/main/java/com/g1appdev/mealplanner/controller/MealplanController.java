@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +26,14 @@ import com.g1appdev.mealplanner.entity.UserEntity;
 import com.g1appdev.mealplanner.repository.RecipeRepository;
 import com.g1appdev.mealplanner.repository.UserRepository;
 import com.g1appdev.mealplanner.service.MealplanService;
+import com.g1appdev.mealplanner.repository.MealplanRepository;
 
 @RestController
 @RequestMapping("/api/meal-plans")
 public class MealplanController {
+
+    @Autowired
+    private MealplanRepository mealPlanRepository;
 
     @Autowired
     private RecipeRepository recipeRepository;
@@ -122,5 +127,48 @@ public class MealplanController {
     public ResponseEntity<Void> deleteMealPlan(@PathVariable Long id) {
         mealplanService.deleteMealPlan(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/share/{mealPlanId}")
+    public ResponseEntity<?> shareMealPlan(@PathVariable Long mealPlanId) {
+        Optional<MealplanEntity> optionalMealPlan = mealPlanRepository.findById(mealPlanId);
+        if (optionalMealPlan.isPresent()) {
+            MealplanEntity mealPlan = optionalMealPlan.get();
+            mealPlan.setShared(true);
+            mealPlanRepository.save(mealPlan);
+            return ResponseEntity.ok("Meal plan shared successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Meal plan not found.");
+        }
+    }
+
+    @GetMapping("/shared")
+    public ResponseEntity<List<MealplanEntity>> getAllSharedMealPlans() {
+        List<MealplanEntity> sharedMealPlans = mealPlanRepository.findBySharedTrue();
+        return ResponseEntity.ok(sharedMealPlans);
+    }
+
+    @PutMapping("/unshare/{mealPlanId}")
+    public ResponseEntity<?> unshareMealPlan(@PathVariable Long mealPlanId) {
+        Optional<MealplanEntity> optionalMealPlan = mealPlanRepository.findById(mealPlanId);
+        if (optionalMealPlan.isPresent()) {
+            MealplanEntity mealPlan = optionalMealPlan.get();
+            mealPlan.setShared(false);
+            mealPlanRepository.save(mealPlan);
+            return ResponseEntity.ok("Meal plan unshared successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Meal plan not found.");
+        }
+    }
+
+    @PutMapping("/{mealPlanId}/caption")
+    public ResponseEntity<MealplanEntity> updateCaption(
+            @PathVariable Long mealPlanId,
+            @RequestBody Map<String, String> body,
+            @AuthenticationPrincipal UserEntity currentUser
+    ) {
+        String newCaption = body.get("caption");
+        MealplanEntity updated = mealplanService.updateCaption(mealPlanId, currentUser, newCaption);
+        return ResponseEntity.ok(updated);
     }
 }

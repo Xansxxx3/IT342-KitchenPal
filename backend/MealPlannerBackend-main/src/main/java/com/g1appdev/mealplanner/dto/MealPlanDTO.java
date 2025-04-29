@@ -11,6 +11,7 @@ public class MealPlanDTO {
     private LocalDateTime mealDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String caption;
 
     // Getters and Setters
     public Long getMealPlanId() {
@@ -59,6 +60,14 @@ public class MealPlanDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 }
 

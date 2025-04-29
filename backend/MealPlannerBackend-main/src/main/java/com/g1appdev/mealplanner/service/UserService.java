@@ -7,7 +7,13 @@ import com.g1appdev.mealplanner.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.List;
 
@@ -88,6 +94,30 @@ public class UserService {
             return true; // Return true if deletion is successful
         }
         return false; // Return false if the user does not exist
+    }
+
+    public String uploadProfileImage(Long userId, MultipartFile image) {
+        try {
+            String fileName = "user-" + userId + "-" + image.getOriginalFilename();
+            Path uploadPath = Paths.get("uploads");
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            UserEntity user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+            user.setProfileImagePath("/uploads/" + fileName); // saves to DB
+            userRepository.save(user);
+
+            return fileName; // 👈 return the filename to the controller
+        } catch (IOException e) {
+            throw new RuntimeException("Could not upload image: " + e.getMessage());
+        }
     }
 
 }

@@ -13,6 +13,7 @@ import AdminDashboard from './AdminDashboard';
 import AdminRecipeManagement from './AdminRecipeManagement';
 import AdminMealPlan from './AdminMealPlan';
 import OAuth2RedirectHandler from './OAuth2RedirectHandler ';
+import SocialFeed from './SocialFeed'; // Import SocialFeed component
 
 
 
@@ -32,6 +33,7 @@ export default function TheRoutes() {
             <Route path="/AdminRecipeManagement" element={<ProtectedRoute><AdminRecipeManagement /></ProtectedRoute>} />
             <Route path="/AdminMealPlan" element={<ProtectedRoute><AdminMealPlan /></ProtectedRoute>} />
             <Route path="/oauth2-redirect" element={<OAuth2RedirectHandler />} />
+            <Route path="/social-feed" element={<ProtectedRoute><SocialFeed /></ProtectedRoute>} />
             <Route path="*" element={<h1>Nothing Here..</h1>} />
         </Routes>
     )

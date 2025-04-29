@@ -37,6 +37,7 @@ public class UserEntity implements UserDetails {
     private String pass;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String profileImagePath;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
@@ -89,6 +90,14 @@ public class UserEntity implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
     }
 
     @Override

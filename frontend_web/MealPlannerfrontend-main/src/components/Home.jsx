@@ -89,7 +89,7 @@ const Home = () => {
             textShadow: '2px 2px 5px rgba(0, 0, 0, 0.5)',
           }}
         >
-          PlatePal
+          KitchenPal
         </Typography>
         <Typography
           variant="body1"
@@ -99,7 +99,7 @@ const Home = () => {
             color: '#333',
           }}
         >
-         <span style={{ color: '#FFD700', fontWeight: 'bold' }}>PlatePal</span> makes meal preparation simple and efficient. On our Recipe page, explore a wide variety of dishes and decide how you want to organize your meals. With just a click, you can add recipes directly to your Meal Plan to structure your days or to your Shopping List to ensure you have all the ingredients ready. Whether you’re planning meals for the day or creating a grocery list, <span style={{ color: '#FFD700' }}>PlatePal</span> gives you the flexibility to stay organized and focus on what matters most – enjoying delicious meals!
+         <span style={{ color: '#FFD700', fontWeight: 'bold' }}>KitchenPal</span> makes meal preparation simple and efficient. On our Recipe page, explore a wide variety of dishes and decide how you want to organize your meals. With just a click, you can add recipes directly to your Meal Plan to structure your days or to your Shopping List to ensure you have all the ingredients ready. Whether you’re planning meals for the day or creating a grocery list, <span style={{ color: '#FFD700' }}>KitchenPal</span> gives you the flexibility to stay organized and focus on what matters most – enjoying delicious meals!
 
         </Typography>
       </Box>
@@ -139,10 +139,10 @@ const Home = () => {
         }}
       >
         <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-          © 2024 PlatePal. All rights reserved.
+          © 2024 KitchenPal. All rights reserved.
         </Typography>
         <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-          Email us: <a href="mailto:Platepal@gmail.com" style={{ color: '#FFD700' }}>Platepal@gmail.com</a>
+          Email us: <a href="mailto:KitchenPal@gmail.com" style={{ color: '#FFD700' }}>KitchenPal@gmail.com</a>
         </Typography>
       </Box>
     </Box>
