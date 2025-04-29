@@ -63,9 +63,6 @@ data class UserEntity(
     val name: String // Add other fields as needed
 )
 
-
-
-
 interface ApiService {
     @GET("api/v1/user/print")
     suspend fun getGreeting(): Response<GreetingResponse>
