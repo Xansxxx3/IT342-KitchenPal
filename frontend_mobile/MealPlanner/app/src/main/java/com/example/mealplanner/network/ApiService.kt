@@ -43,6 +43,7 @@ data class Recipe(
     val cuisineType: String,
     val mealType: String,
     val ratingsAverage: Double,
+    val price: Int,
     val imagePath: String // this is the uploaded Cloudinary URL
 )
 
