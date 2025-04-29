@@ -10,7 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.items // ✅ this is the key import
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -24,12 +24,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.mealplanner.R
-import com.example.mealplanner.network.Recipe
 import com.example.mealplanner.network.RetrofitClient
+import com.example.mealplanner.network.ShoppingListItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -39,16 +40,26 @@ fun ShoppingListScreen(navHostController: NavHostController) {
     BackHandler { activity?.finish() }
 
     var selectedItem by remember { mutableStateOf(4) }
-    var items by remember { mutableStateOf<List<Recipe>>(emptyList()) }
+    val shoppinglist = remember { mutableStateOf<List<ShoppingListItem>>(emptyList()) }
 
-    // Load all recipes into your “shopping list”
     LaunchedEffect(Unit) {
-        val token = getJwtToken(context) ?: return@LaunchedEffect
-        items = RetrofitClient.RetrofitInstance.api.getAllRecipes("Bearer $token")
+        try {
+            val sharedPref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+            val token = sharedPref.getString("jwt_token", null)
+
+            if (token != null) {
+                val bearerToken = "Bearer $token"
+                val response = RetrofitClient.apiService.getAllShoppingList(bearerToken)
+                shoppinglist.value = response
+            } else {
+                println("No token found. Maybe user not logged in?")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
-        // Background
         Image(
             painter = painterResource(R.drawable.bg),
             contentDescription = null,
@@ -56,13 +67,11 @@ fun ShoppingListScreen(navHostController: NavHostController) {
             modifier = Modifier.matchParentSize()
         )
 
-        // Content + TopNavBar
         Column(
             Modifier
                 .fillMaxSize()
                 .padding(bottom = 56.dp)
         ) {
-            // ← EXACTLY your existing header bar
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -99,13 +108,13 @@ fun ShoppingListScreen(navHostController: NavHostController) {
             }
 
             Spacer(Modifier.height(24.dp))
+
             Text(
                 "Your Shopping List",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 8.dp)
             )
 
-            // White card with grid
             Card(
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
                 modifier = Modifier.fillMaxSize()
@@ -115,7 +124,10 @@ fun ShoppingListScreen(navHostController: NavHostController) {
                     contentPadding = PaddingValues(8.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(items, key = { it.id }) { recipe ->
+                    val sList = shoppinglist.value
+                    items(sList, key = { it.shoppingListItemId ?: 0L }) { shoppingListItem ->
+                        val firstRecipe = shoppingListItem.recipes.firstOrNull()
+
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
@@ -123,26 +135,68 @@ fun ShoppingListScreen(navHostController: NavHostController) {
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(Color.White)
                                 .clickable {
-                                    navHostController.navigate("cart/${recipe.id}")
+                                    navHostController.navigate("cart/${shoppingListItem.shoppingListItemId}")
                                 }
                         ) {
-                            Image(
-                                painter = rememberAsyncImagePainter(recipe.imagePath),
-                                contentDescription = recipe.title,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                            )
-                            Spacer(Modifier.height(4.dp))
-                            Box(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .background(Color(0xFF8CE196), RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
-                                    .padding(4.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(recipe.title, style = MaterialTheme.typography.bodySmall)
+                            if (firstRecipe != null) {
+                                Image(
+                                    painter = rememberAsyncImagePainter(firstRecipe.imagePath),
+                                    contentDescription = firstRecipe.title,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .clip(
+                                            RoundedCornerShape(
+                                                topStart = 8.dp,
+                                                topEnd = 8.dp
+                                            )
+                                        )
+                                )
+
+                                Spacer(Modifier.height(4.dp))
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(
+                                            Color(0xFF8CE196),
+                                            RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+                                        )
+                                        .padding(4.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = firstRecipe.title,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
+                                Spacer(Modifier.height(4.dp))
+
+                                Text(
+                                    text = "Qty: ${shoppingListItem.quantity}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+
+                                Text(
+                                    text = shoppingListItem.status,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (shoppingListItem.status.equals("PENDING", true))
+                                        Color.Yellow else Color.Green,
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                )
+
+                            } else {
+                                Text(
+                                    text = "No recipe",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(4.dp),
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -150,24 +204,23 @@ fun ShoppingListScreen(navHostController: NavHostController) {
             }
         }
 
-        // ← EXACTLY your existing bottom bar
         NavigationBar(
             containerColor = Color(0xFFF8F877),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             val itemsNav = listOf(
                 Icons.Default.Settings to "Settings",
-                Icons.Default.Search   to "Meal Plan",
-                Icons.Default.Home     to "Home",
+                Icons.Default.Search to "Meal Plan",
+                Icons.Default.Home to "Home",
                 Icons.Default.Favorite to "Recipes",
                 Icons.Default.ShoppingCart to "Shopping"
             )
             itemsNav.forEachIndexed { idx, (icon, label) ->
                 NavigationBarItem(
-                    icon    = { Icon(icon, contentDescription = label) },
-                    label   = { Text(label) },
+                    icon = { Icon(icon, contentDescription = label) },
+                    label = { Text(label) },
                     selected = selectedItem == idx,
-                    onClick  = {
+                    onClick = {
                         selectedItem = idx
                         when (idx) {
                             0 -> navHostController.navigate("settings")
@@ -181,10 +234,4 @@ fun ShoppingListScreen(navHostController: NavHostController) {
             }
         }
     }
-}
-
-// simple helper
-private fun getJwtToken(context: Context): String? {
-    val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-    return prefs.getString("jwt_token", null)
 }

@@ -16,8 +16,9 @@ import com.example.mealplanner.ui.screens.MealPlanScreen
 import com.example.mealplanner.ui.screens.RecipeDetailScreen
 import com.example.mealplanner.ui.screens.RecipesScreen
 import com.example.mealplanner.ui.screens.SettingsScreen
-import com.example.mealplanner.ui.screens.ShoppingListScreen
 import com.example.mealplanner.ui.screens.ShoppingCartScreen
+import com.example.mealplanner.ui.screens.ShoppingListScreen
+
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -56,6 +57,7 @@ fun AppNavGraph(navController: NavHostController) {
         composable("shopping") {
             ShoppingListScreen(navController) // This will be your shopping screen
         }
+
 
         composable(
             route = "cart/{itemId}",
