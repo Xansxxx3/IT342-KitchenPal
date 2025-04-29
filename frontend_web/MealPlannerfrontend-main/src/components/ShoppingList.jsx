@@ -22,7 +22,6 @@ import kaleQuinoaSaladImage from '../assets/Recipes/Kale & Quinoa Salad with Lem
 import oatsImage from '../assets/Recipes/Quick-Cooking Oats.png';
 import salmonQuinoaBowlImage from "../assets/Recipes/Salmon_Quinoa_Bowls.png";
 import beanSoupImage from '../assets/Recipes/Slow-Cooker Bean, Kale & Barley Soup.png';
-import teriyakiRiceBowlImage from '../assets/Recipes/Teriyaki Chicken Rice Bowl.png';
 import stuffedCabbageImage from '../assets/Recipes/Vegetarian Stuffed Cabbage.png';
 
 const ShoppingList = () => {
@@ -38,7 +37,6 @@ const ShoppingList = () => {
     { name: 'Quick-Cooking Oats', image: oatsImage },
     { name: 'Salmon & Quinoa Bowl', image: salmonQuinoaBowlImage },
     { name: 'Bean, Kale & Barley Soup', image: beanSoupImage },
-    { name: 'Teriyaki Chicken Rice Bowl', image: teriyakiRiceBowlImage },
     { name: 'Vegetarian Stuffed Cabbage', image: stuffedCabbageImage },
   ];
 
