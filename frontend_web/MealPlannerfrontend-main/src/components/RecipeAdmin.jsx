@@ -46,7 +46,7 @@ const RecipeAdmin = () => {
       try {
         const token = localStorage.getItem('token');
         const [recipeResponse] = await Promise.all([
-          axios.get('http://localhost:8080/api/recipe/allrecipe', {
+          axios.get('https://it342-kitchenpal.onrender.com/api/recipe/allrecipe', {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -67,7 +67,7 @@ const handleUpdateRecipe = async (updatedRecipe) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:8080/api/recipe/update/${updatedRecipe.recipeId}`,
+        `https://it342-kitchenpal.onrender.com/api/recipe/update/${updatedRecipe.recipeId}`,
         updatedRecipe,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -92,7 +92,7 @@ const handleUpdateRecipe = async (updatedRecipe) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:8080/api/recipe/addrecipe',
+        'https://it342-kitchenpal.onrender.com/api/recipe/addrecipe',
         newRecipe,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -119,7 +119,7 @@ const handleUpdateRecipe = async (updatedRecipe) => {
   const handleDeleteRecipe = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:8080/api/recipe/delete/${id}`, {
+      await axios.delete(`https://it342-kitchenpal.onrender.com/api/recipe/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setRecipes((prevRecipes) =>

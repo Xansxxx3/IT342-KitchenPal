@@ -47,26 +47,28 @@ const UserProfile = () => {
 
           try {
               const response = await axios.post(
-                  "http://localhost:8080/api/v1/user/upload-image", // updated endpoint
+                  "https://it342-kitchenpal.onrender.com/api/v1/user/upload-image",
                   formData,
                   {
                       headers: {
-                          Authorization: `Bearer ${localStorage.getItem("token")}`, // backticks added
+                          Authorization: `Bearer ${localStorage.getItem("token")}`,
                           "Content-Type": "multipart/form-data",
                       },
+                      withCredentials: true,
                   }
               );
 
-              console.log("Upload response:", response.data); // check what comes back
+              console.log("Upload response:", response.data);
 
               setProfile((prev) => ({
                   ...prev,
-                  profileImage: response.data.fileName, // ⬅️ save new image filename
+                  profileImage: response.data.imageUrl, // ✅ use full Cloudinary URL
               }));
           } catch (error) {
               console.error("Error uploading image", error);
           }
       };
+
 
 
     useEffect(() => {
@@ -79,7 +81,7 @@ const UserProfile = () => {
             }
 
             try {
-                const response = await axios.get("http://localhost:8080/api/v1/auth/me", {
+                const response = await axios.get("https://it342-kitchenpal.onrender.com/api/v1/auth/me", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -92,9 +94,8 @@ const UserProfile = () => {
                     fname: user.fname,
                     lname: user.lname,
                     email: user.email,
-                    profileImage: user.profileImagePath
-                        ? user.profileImagePath.split("/").pop()
-                        : "",
+                    profileImage: user.profileImagePath || "",
+
                 });
             } catch (error) {
                 setMessage("Error fetching profile data.");
@@ -125,7 +126,7 @@ const UserProfile = () => {
         e.preventDefault();
         try {
             const response = await axios.put(
-                "http://localhost:8080/api/v1/user/profile",
+                "https://it342-kitchenpal.onrender.com/api/v1/user/profile",
                 profile,
                 {
                     headers: {
@@ -146,7 +147,7 @@ const UserProfile = () => {
         e.preventDefault();
         try {
             const response = await axios.put(
-                "http://localhost:8080/api/v1/user/change-password",
+                "https://it342-kitchenpal.onrender.com/api/v1/user/change-password",
                 passwordData,
                 {
                     headers: {
@@ -189,9 +190,10 @@ const UserProfile = () => {
                             <img
                               src={
                                 profile.profileImage
-                                  ? `http://localhost:8080/uploads/${profile.profileImage}`
+                                  ? profile.profileImage // ✅ direct Cloudinary URL
                                   : "https://via.placeholder.com/150?text=Profile"
                               }
+
                               alt="Profile"
                               className="profile-image"
                             />

@@ -32,7 +32,7 @@ const AdminMealPlan = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8080/api/v1/admin/users/mealplans', {
+        const response = await axios.get('https://it342-kitchenpal.onrender.com/api/v1/admin/users/mealplans', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setData(response.data);
@@ -64,7 +64,7 @@ const AdminMealPlan = () => {
   const handleDelete = async (mealPlanId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:8080/api/v1/admin/mealplans/${mealPlanId}`, {
+      await axios.delete(`https://it342-kitchenpal.onrender.com/api/v1/admin/mealplans/${mealPlanId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setData(data.filter(mealPlan => mealPlan.mealPlanId !== mealPlanId)); // Update UI by removing deleted meal plan

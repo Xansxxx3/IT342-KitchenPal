@@ -54,8 +54,11 @@ const AdminRecipeManagement = () => {
     const fetchRecipes = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8080/api/recipe/allrecipe", {
-          headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.get("https://it342-kitchenpal.onrender.com/api/recipe/allrecipe", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          }
         });
         setRecipes(response.data);
       } catch (error) {
@@ -84,7 +87,7 @@ const AdminRecipeManagement = () => {
         formData.append("image", selectedImage);
       }
 
-      const response = await axios.post("http://localhost:8080/api/recipe/addrecipe", formData, {
+      const response = await axios.post("https://it342-kitchenpal.onrender.com/api/recipe/addrecipe", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -128,7 +131,7 @@ const AdminRecipeManagement = () => {
       }
 
       await axios.put(
-        `http://localhost:8080/api/recipe/update/${selectedRecipe.recipeId}`,
+        `https://it342-kitchenpal.onrender.com/api/recipe/update/${selectedRecipe.recipeId}`,
         formData,
         {
           headers: {
@@ -160,8 +163,11 @@ const AdminRecipeManagement = () => {
   const handleDeleteRecipe = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:8080/api/recipe/delete/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      await axios.delete(`https://it342-kitchenpal.onrender.com/api/recipe/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
       setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.recipeId !== id));
       setAlertMessage("Recipe deleted successfully!");

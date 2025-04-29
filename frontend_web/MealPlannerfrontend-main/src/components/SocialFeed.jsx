@@ -54,7 +54,7 @@ const [captionText, setCaptionText] = useState('');
 
   const fetchSharedMealPlans = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/meal-plans/shared");
+      const response = await axios.get("https://it342-kitchenpal.onrender.com/api/meal-plans/shared");
       setSharedMealPlans(response.data);
     } catch (error) {
       console.error("Error fetching shared meal plans", error);
@@ -70,7 +70,7 @@ const [captionText, setCaptionText] = useState('');
   const handleDelete = async (mealPlanId) => {
     try {
       await axios.put(
-        `http://localhost:8080/api/meal-plans/unshare/${mealPlanId}`,
+        `https://it342-kitchenpal.onrender.com/api/meal-plans/unshare/${mealPlanId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -97,7 +97,7 @@ const [captionText, setCaptionText] = useState('');
 
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/meal-plans/${mealPlan.mealPlanId}/comments`
+        `https://it342-kitchenpal.onrender.com/api/meal-plans/${mealPlan.mealPlanId}/comments`
       );
       setComments(res.data);
     } catch (err) {
@@ -116,7 +116,7 @@ const [captionText, setCaptionText] = useState('');
     if (!commentText.trim()) return;
     try {
       const res = await axios.post(
-        `http://localhost:8080/api/meal-plans/${selectedMealPlan.mealPlanId}/comments`,
+        `https://it342-kitchenpal.onrender.com/api/meal-plans/${selectedMealPlan.mealPlanId}/comments`,
         { text: commentText },
         { headers: { Authorization: `Bearer ${token}` },
       });
@@ -137,7 +137,7 @@ const [captionText, setCaptionText] = useState('');
    const handleDeleteComment = async (commentId) => {
      try {
        await axios.delete(
-         `http://localhost:8080/api/meal-plans/${selectedMealPlan.mealPlanId}/comments/${commentId}`,
+         `https://it342-kitchenpal.onrender.com/api/meal-plans/${selectedMealPlan.mealPlanId}/comments/${commentId}`,
          {
            headers: { Authorization: `Bearer ${token}` },
          }
@@ -161,7 +161,7 @@ const [captionText, setCaptionText] = useState('');
    const handleCaptionSubmit = async () => {
      try {
        await axios.put(
-         `http://localhost:8080/api/meal-plans/${selectedMealPlan.mealPlanId}/caption`,
+         `https://it342-kitchenpal.onrender.com/api/meal-plans/${selectedMealPlan.mealPlanId}/caption`,
          { caption: captionText },
          { headers: { Authorization: `Bearer ${token}` } }
        );
@@ -232,9 +232,10 @@ const [captionText, setCaptionText] = useState('');
                       <Avatar
                         src={
                           plan.user?.profileImagePath
-                            ? `http://localhost:8080/uploads/${plan.user.profileImagePath.split("/").pop()}`
+                            ? plan.user.profileImagePath
                             : "https://via.placeholder.com/150?text=Profile"
                         }
+
                         alt="User Avatar"
                       >
                         {!plan.user?.profileImagePath &&
@@ -251,12 +252,12 @@ const [captionText, setCaptionText] = useState('');
                     title={`${plan.user?.fname} ${plan.user?.lname}`}
                     subheader="Shared a meal plan"
                   />
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={`http://localhost:8080/api/recipe/images/${plan.recipe.imagePath}`}
-                    alt={plan.recipe.title}
-                  />
+                 <CardMedia
+                   component="img"
+                   height="140"
+                   image={plan.recipe.imagePath} // Assuming this is a full Cloudinary URL
+                   alt={plan.recipe.title}
+                 />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                       {plan.recipe?.title || "Recipe Title Not Available"}
@@ -297,7 +298,7 @@ const [captionText, setCaptionText] = useState('');
           >
             <Box display="flex" flexDirection="row" gap="20px">
               <img
-                src={`http://localhost:8080/api/recipe/images/${selectedMealPlan.recipe.imagePath}`}
+                src={selectedMealPlan.recipe.imagePath}
                 alt={selectedMealPlan.recipe.title}
                 style={{
                   borderRadius: "10px",
@@ -458,9 +459,10 @@ const [captionText, setCaptionText] = useState('');
                      alt={`${comment.firstName} ${comment.lastName}`}
                      src={
                        comment.profileImagePath
-                         ? `http://localhost:8080/uploads/${comment.profileImagePath.split("/").pop()}`
+                         ? comment.profileImagePath
                          : "https://via.placeholder.com/150?text=Profile"
                      }
+
                      sx={{ width: 40, height: 40 }}
                    >
                     {!comment.profileImagePath &&
