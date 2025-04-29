@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.g1appdev.mealplanner.entity.RecipeEntity;
 import com.g1appdev.mealplanner.entity.ShoppingListItemsEntity;
 import com.g1appdev.mealplanner.service.ShoppingListItemsService;
 
@@ -37,6 +38,12 @@ public class ShoppingListItemsController {
     @PostMapping
     public ShoppingListItemsEntity createShoppingListItem(@RequestBody ShoppingListItemsEntity shoppingListItem) {
         return shoppingListItemsService.createShoppingListItem(shoppingListItem);
+    }
+
+    @GetMapping("/get/allShoppingList")
+    public ResponseEntity<List<ShoppingListItemsEntity>> getAllShoppingList() {
+        List<ShoppingListItemsEntity> shoppingList = shoppingListItemsService.getAllShoppingListItems();
+        return ResponseEntity.ok(shoppingList); // Return the list even if empty
     }
 
     @PutMapping("/{id}")

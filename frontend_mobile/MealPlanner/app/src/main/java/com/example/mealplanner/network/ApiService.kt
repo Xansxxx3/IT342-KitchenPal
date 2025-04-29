@@ -45,14 +45,24 @@ data class Recipe(
     val cuisineType: String,
     val mealType: String,
     val ratingsAverage: Double,
-
     val imagePath: String
-
 )
 data class MealPlanRequest(
     val userId: String,
     val recipeId: Int
 )
+data class ShoppingListItem(
+    val shoppingListItemId: Long? = null,
+    val user: UserEntity,
+    val recipes: Set<Recipe>,
+    val quantity: Int,
+    val status: String
+)
+data class UserEntity(
+    val id: String,
+    val name: String // Add other fields as needed
+)
+
 
 
 
@@ -67,9 +77,14 @@ interface ApiService {
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
     @GET("api/recipe/allrecipe")
-        suspend fun getAllRecipes(
-            @Header("Authorization") token: String
-        ): List<Recipe>
+    suspend fun getAllRecipes(
+        @Header("Authorization") token: String
+    ): List<Recipe>
+
+    @GET("/api/shopping-list-items/allShoppingList")
+    suspend fun getAllShoppingList(
+        @Header("Authorization") token: String
+    ): List<ShoppingListItem>
 
     @POST("api/meal-plans/add")
     suspend fun addMealPlan(

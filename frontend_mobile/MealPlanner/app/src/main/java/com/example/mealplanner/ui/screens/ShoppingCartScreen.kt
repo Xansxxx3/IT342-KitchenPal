@@ -1,5 +1,6 @@
 package com.example.mealplanner.ui.screens
 
+import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -21,30 +22,53 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.example.mealplanner.R
-import com.example.mealplanner.network.Recipe
 import com.example.mealplanner.network.RetrofitClient
+import com.example.mealplanner.network.ShoppingListItem
 
 @Composable
 fun ShoppingCartScreen(
     itemId: Long,
     navHostController: NavHostController
 ) {
-    // Back button
+    val context = LocalContext.current
+    val activity = context as? Activity
+
+    // 1) Handle Android back from top bar
     BackHandler { navHostController.popBackStack() }
 
-    val context = LocalContext.current
-    var item by remember { mutableStateOf<Recipe?>(null) }
+    // 2) State holding the full list
+    val shoppinglist = remember { mutableStateOf<List<ShoppingListItem>>(emptyList()) }
 
-    LaunchedEffect(itemId) {
-        val token = getJwtToken(context) ?: return@LaunchedEffect
-        item = RetrofitClient.RetrofitInstance.api
-            .getAllRecipes("Bearer $token")
-            .find { it.id == itemId }
+    // 3) Your fetch logic (LEFT EXACTLY AS-IS)
+    LaunchedEffect(Unit) {
+        try {
+            val sharedPref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+            val token = sharedPref.getString("jwt_token", null)
+
+            if (token != null) {
+                val bearerToken = "Bearer $token"
+                val response = RetrofitClient.apiService.getAllShoppingList(bearerToken)
+                shoppinglist.value = response
+            } else {
+                println("No token found. Maybe user not logged in?")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
+    // 4) This was missing — let the hardware/back gesture also finish the Activity if needed
+    BackHandler(enabled = true) { activity?.finish() }
+
+    // 5) Derive the single ShoppingList entry from the list by itemId
+    val item: ShoppingListItem? =
+        shoppinglist.value.firstOrNull { it.shoppingListItemId == itemId }
+
+    // 6) From that, grab the first Recipe (if any)
+    val recipe = item?.recipes?.firstOrNull()
+
     Box(Modifier.fillMaxSize()) {
-        // Top bar
+        // — Top bar with back arrow + title —
         Row(
             Modifier
                 .fillMaxWidth()
@@ -57,22 +81,23 @@ fun ShoppingCartScreen(
             }
             Spacer(Modifier.width(8.dp))
             Text(
-                text = item?.title ?: "Loading…",
+                text = recipe?.title ?: "Loading…",
                 style = MaterialTheme.typography.headlineMedium
             )
         }
 
-        item?.let { recipe ->
+        // — Main scrollable content —
+        recipe?.let {
             Column(
                 Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                // Image
+                // Recipe image
                 Image(
-                    painter = rememberAsyncImagePainter(recipe.imagePath),
-                    contentDescription = recipe.title,
+                    painter = rememberAsyncImagePainter(it.imagePath),
+                    contentDescription = it.title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -82,7 +107,7 @@ fun ShoppingCartScreen(
 
                 Spacer(Modifier.height(16.dp))
 
-                // Quantity & Price
+                // Quantity field
                 var qty by remember { mutableStateOf(1) }
                 Row(
                     Modifier.fillMaxWidth(),
@@ -99,12 +124,16 @@ fun ShoppingCartScreen(
                 }
 
                 Spacer(Modifier.height(8.dp))
+
+                // Price calculation (remove or adjust if your Recipe has no price field)
                 Text(
-                    text = "Price: \$${"%.2f".format(recipe.price * qty)}",
+                    text = "Price: \$${"%.2f".format(/* it.price */ 0.0 * qty)}",
                     style = MaterialTheme.typography.bodyLarge
                 )
 
                 Spacer(Modifier.height(24.dp))
+
+                // Buy button
                 Button(
                     onClick = { /* TODO: checkout */ },
                     modifier = Modifier.fillMaxWidth(),
@@ -114,7 +143,7 @@ fun ShoppingCartScreen(
                 }
             }
         } ?: run {
-            // loading spinner
+            // Loading spinner if no recipe loaded yet
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -122,7 +151,7 @@ fun ShoppingCartScreen(
     }
 }
 
-// same helper
+// helper to grab stored JWT
 private fun getJwtToken(context: Context): String? {
     val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
     return prefs.getString("jwt_token", null)
