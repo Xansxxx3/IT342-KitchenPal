@@ -4,15 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tblmealplan")
@@ -39,6 +31,11 @@ public class MealplanEntity {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private boolean shared = false; // Default to false
+
+    @Column(columnDefinition = "TEXT")
+    private String caption;
 
     @PrePersist
     protected void onCreate() {
@@ -103,4 +100,21 @@ public class MealplanEntity {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    public boolean isShared() {
+        return shared;
+    }
+
+    public void setShared(boolean shared) {
+        this.shared = shared;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
 }
