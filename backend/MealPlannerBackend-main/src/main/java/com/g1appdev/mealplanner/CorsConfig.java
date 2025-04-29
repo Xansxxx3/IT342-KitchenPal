@@ -17,8 +17,9 @@ public class CorsConfig {
 
         // Allow Android Emulator (10.0.2.2) and Web App (localhost:3000 for React)
         config.setAllowedOrigins(Arrays.asList(
-            "it-342-kitchen-pal-53jd.vercel.app",
-            "http://localhost:8080",        // Localhost for the Spring Boot backend
+            "https://it-342-kitchen-pal-53jd.vercel.app",
+            "https://it-342-kitchen-pal-53jd-d6kepcknt-viccis-projects.vercel.app/",
+            "http://localhost:8080",        // Localhost for the Spri ng Boot backend
             "http://10.0.2.2:8080",        // Emulator (Android Studio)
             "http://127.0.0.1:8080",       // Another common localhost IP
             "http://localhost:3000",        // Web app (React development server)
