@@ -31,8 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.mealplanner.R
+import com.example.mealplanner.network.MealPlanRequest
 import com.example.mealplanner.network.Recipe
-import com.example.mealplanner.network.RetrofitClient.RetrofitInstance
+import com.example.mealplanner.network.RetrofitClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -52,7 +56,7 @@ fun RecipesScreen(navHostController: NavHostController) {
 
             if (token != null) {
                 val bearerToken = "Bearer $token"
-                val response = RetrofitInstance.api.getAllRecipes(bearerToken)
+                val response = RetrofitClient.apiService.getAllRecipes(bearerToken)
                 recipes.value = response
             } else {
                 println("No token found. Maybe user not logged in?")
@@ -239,19 +243,22 @@ fun RecipeDetailScreen(
 
     val context = LocalContext.current
     var recipe: Recipe? by remember { mutableStateOf<Recipe?>(null) }
+    val sharedPref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+    val token = sharedPref.getString("jwt_token", null)
+    val userid = sharedPref.getString("user_id", null)
+
     println("Login Success in main: ${recipeName}")
 
     LaunchedEffect(recipeName) {
         try {
-            val sharedPref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
-            val token = sharedPref.getString("jwt_token", null)
-
             if (token != null) {
                 val bearerToken = "Bearer $token"
-                val allRecipes = RetrofitInstance.api.getAllRecipes(bearerToken)
+                val allRecipes = RetrofitClient.apiService.getAllRecipes(bearerToken)
 
                 recipe = allRecipes.find { it.title == recipeName }
                 println("Login Success in main: ${recipe?.title}")
+                println("recipe ID: ${recipe?.id}")
+
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -309,7 +316,31 @@ fun RecipeDetailScreen(
                         Text("Shop Ingredients")
                     }
                     Button(
-                        onClick = { /* Add to meal plan */ },
+                        onClick = {
+                            val recipeId = recipe?.id
+                            if (recipeId != null) {
+                                val sharedPref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+                                val token = sharedPref.getString("jwt_token", null)
+                                val userid = sharedPref.getString("user_id", null)
+                                println("Login Success in main: ${token}")
+                                println("Login Success in main: ${userid}")
+                                val request = MealPlanRequest(userid.toString(), recipeId)
+                                println("Login Success in main: ${request.recipeId}")
+                                println("Login Success in main: ${request.userId}")
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    try {
+                                        val bearerToken = "Bearer $token"
+                                        RetrofitClient.apiService.addMealPlan(bearerToken, request)
+                                        // Maybe show success UI after?
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                        // Maybe show error UI
+                                    }
+                                }
+                            } else {
+                                println("Recipe ID is null!")
+                            }
+                        /* Add to meal plan */ },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8CE196))
                     ) {
                         Icon(Icons.Default.Star, contentDescription = null)

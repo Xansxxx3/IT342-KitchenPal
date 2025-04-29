@@ -1,5 +1,6 @@
 package com.example.mealplanner.network
 
+import com.google.gson.annotations.SerializedName
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Body
@@ -34,7 +35,8 @@ data class LoginResponse(
 )
 
 data class Recipe(
-    val id: Long,
+    @SerializedName("recipeId")
+    val id: Int,
     val title: String,
     val description: String,
     val ingredients: String,
@@ -43,8 +45,14 @@ data class Recipe(
     val cuisineType: String,
     val mealType: String,
     val ratingsAverage: Double,
-    val imagePath: String // this is the uploaded Cloudinary URL
+    val imagePath: String
 )
+data class MealPlanRequest(
+    val userId: String,
+    val recipeId: Int
+)
+
+
 
 interface ApiService {
     @GET("api/v1/user/print")
@@ -56,10 +64,17 @@ interface ApiService {
     @POST("api/v1/auth/register")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
-    interface RecipeApi {
-        @GET("/api/recipe/allrecipe")
+    @GET("api/recipe/allrecipe")
         suspend fun getAllRecipes(
             @Header("Authorization") token: String
         ): List<Recipe>
-    }
+
+    @POST("api/meal-plans/add")
+    suspend fun addMealPlan(
+        @Header("Authorization") token: String,
+        @Body request: MealPlanRequest
+    )
+
+
+
 }
