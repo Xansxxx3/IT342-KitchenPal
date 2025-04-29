@@ -64,9 +64,9 @@ fun SignUpScreen(navController: NavController, onSignUp: (String, String, String
                     contentDescription = "Logo",
                     modifier = Modifier.height(80.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(3.dp))
                 Text(
-                    text = "itchen Pal",
+                    text = "itchenPal",
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )

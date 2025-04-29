@@ -5,19 +5,15 @@ import com.g1appdev.mealplanner.dto.UserProfileDTO;
 import com.g1appdev.mealplanner.entity.UserEntity;
 import com.g1appdev.mealplanner.service.UserService;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", methods = { RequestMethod.GET,
@@ -49,5 +45,18 @@ public class UserController {
         }
         userProfileService.changeUserPassword(user.getUserId(), passwordChangeDTO);
         return ResponseEntity.ok("Password updated successfully");
+    }
+
+    @PostMapping("/upload-image")
+    public ResponseEntity<Map<String, String>> uploadProfileImage(@AuthenticationPrincipal UserEntity user,
+                                                                  @RequestParam("image") MultipartFile image) {
+        try {
+            String fileName = userProfileService.uploadProfileImage(user.getUserId(), image);
+            Map<String, String> response = new HashMap<>();
+            response.put("fileName", fileName); // 👈 return key "fileName"
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

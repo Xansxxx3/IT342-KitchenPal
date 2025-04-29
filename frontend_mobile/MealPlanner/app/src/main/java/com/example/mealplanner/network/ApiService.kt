@@ -45,7 +45,9 @@ data class Recipe(
     val cuisineType: String,
     val mealType: String,
     val ratingsAverage: Double,
+
     val imagePath: String
+
 )
 data class MealPlanRequest(
     val userId: String,

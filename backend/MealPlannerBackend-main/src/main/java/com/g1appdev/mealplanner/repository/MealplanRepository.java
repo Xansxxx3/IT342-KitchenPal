@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MealplanRepository extends JpaRepository<MealplanEntity, Long> {
     List<MealplanEntity> findByUser(UserEntity user);
+    List<MealplanEntity> findBySharedTrue();
+
 }
