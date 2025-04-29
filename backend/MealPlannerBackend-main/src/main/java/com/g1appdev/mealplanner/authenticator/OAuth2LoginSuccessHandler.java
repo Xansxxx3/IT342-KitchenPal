@@ -69,7 +69,7 @@ if (existingUser.isPresent()) {
             redirectUrl = "myapp://oauth2redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
         } else {
             // Web client
-            redirectUrl = "http://localhost:3000/oauth2-redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
+            redirectUrl = "https://it-342-kitchen-pal-53jd.vercel.app/oauth2-redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
         }
         response.sendRedirect(redirectUrl);
     }
