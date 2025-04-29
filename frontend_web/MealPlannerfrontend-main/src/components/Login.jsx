@@ -146,7 +146,7 @@ const Login = () => {
         type="button"
         className="google-signin-btn"
         onClick={() => {
-          window.location.href = 'https://it342-kitchenpal.onrender.com/oauth2/authorization/google';
+          window.location.href = 'https://it342-kitchenpal.onrender.com/login/oauth2/code/google';
     }}
     >
     <img
