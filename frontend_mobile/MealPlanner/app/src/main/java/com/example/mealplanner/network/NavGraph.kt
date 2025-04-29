@@ -7,6 +7,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.mealplanner.ui.screens.SignInScreen
 import com.example.mealplanner.ui.screens.SignUpScreen
 import com.example.mealplanner.ui.screens.HomeScreen
@@ -14,8 +16,8 @@ import com.example.mealplanner.ui.screens.MealPlanScreen
 import com.example.mealplanner.ui.screens.RecipeDetailScreen
 import com.example.mealplanner.ui.screens.RecipesScreen
 import com.example.mealplanner.ui.screens.SettingsScreen
-import com.example.mealplanner.ui.screens.ShoppingScreen
-
+import com.example.mealplanner.ui.screens.ShoppingListScreen
+import com.example.mealplanner.ui.screens.ShoppingCartScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -52,8 +54,23 @@ fun AppNavGraph(navController: NavHostController) {
             RecipesScreen(navController) // This will be your recipes screen
         }
         composable("shopping") {
-            ShoppingScreen(navController) // This will be your shopping screen
+            ShoppingListScreen(navController) // This will be your shopping screen
         }
+
+        composable(
+            route = "cart/{itemId}",
+            arguments = listOf(
+                navArgument("itemId") { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getLong("itemId")
+                ?: return@composable
+            ShoppingCartScreen(
+                itemId = itemId,
+                navHostController = navController
+            )
+        }
+
         composable("settings") {
             SettingsScreen(navController) // This will be your settings screen
         }
