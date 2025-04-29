@@ -63,14 +63,19 @@ if (existingUser.isPresent()) {
 
         
         String userAgent = request.getHeader("User-Agent");
+               
 
-        if (userAgent != null && (userAgent.contains("Mobile") || userAgent.contains("Android") || userAgent.contains("iPhone"))) {
-            // Mobile device
-            redirectUrl = "myapp://oauth2redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-        } else {
-            // Web client
-            redirectUrl = "https://it-342-kitchen-pal-53jd.vercel.app/oauth2-redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
-        }
+        // if (userAgent != null && (userAgent.contains("Mobile") || userAgent.contains("Android") || userAgent.contains("iPhone"))) {
+        //     // Mobile device
+        //     redirectUrl = "myapp://oauth2redirect?token=" + jwtToken + "&role=" + user.getRole() + "&userId=" + user.getUserId();
+        // } else {
+        //     // Web client
+         
+               redirectUrl = "https://it-342-kitchen-pal-53jd.vercel.app/oauth2-redirect?token=" 
+    + URLEncoder.encode(jwtToken, StandardCharsets.UTF_8)
+    + "&role=" + user.getRole()
+    + "&userId=" + user.getUserId();
+        // }
         response.sendRedirect(redirectUrl);
     }
 }
