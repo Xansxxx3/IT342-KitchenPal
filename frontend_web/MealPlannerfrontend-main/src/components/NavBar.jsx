@@ -98,6 +98,21 @@ const NavBar = () => {
             Recipe
           </Button>
 
+          {/* Add Social Feed Button */}
+            <Button
+              component={Link}
+              to="/social-feed" // Link to SocialFeed page
+              variant="contained"
+              sx={{
+                backgroundColor: '#A0D683',
+                color: '#333',
+                fontWeight: 'bold',
+                '&:hover': { backgroundColor: '#8DBF6A' },
+              }}
+            >
+              Social Feed
+            </Button>
+
           {/* Profile Dropdown */}
           <IconButton
             onClick={handleMenuOpen}

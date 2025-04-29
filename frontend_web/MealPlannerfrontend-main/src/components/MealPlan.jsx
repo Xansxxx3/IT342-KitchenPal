@@ -11,11 +11,16 @@ import {
   Button,
   CircularProgress,
   Modal,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 import backgroundImage from "../assets/leafbg.png"; // Background image
 import NavBar from "../components/NavBar"; // NavBar component
 import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation and useNavigate
+import Slide from '@mui/material/Slide';
+import ShareIcon from '@mui/icons-material/Share';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const MealPlan = () => {
   const location = useLocation(); // Hook to access current location
@@ -25,6 +30,10 @@ const MealPlan = () => {
   const [error, setError] = useState(null); // Error state
   const [selectedMealPlan, setSelectedMealPlan] = useState(null); // Selected meal plan for modal
   const [open, setOpen] = useState(false); // Modal state
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('success'); // or 'error'
 
   // Retrieve userId from query parameters or fallback to localStorage
   const queryParams = new URLSearchParams(location.search);
@@ -84,7 +93,10 @@ const MealPlan = () => {
 
   // Open modal with selected meal plan
   const handleOpen = (mealPlan) => {
-    setSelectedMealPlan(mealPlan);
+    setSelectedMealPlan({
+        ...mealPlan,
+        shared: mealPlan.shared || false // Add a default flag if not already present
+      });
     setOpen(true);
   };
 
@@ -319,16 +331,113 @@ const MealPlan = () => {
                 </Typography>
               </Box>
 
-              {/* Delete Button */}
-              <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-                <Button variant="contained" color="error" onClick={deleteMealPlan}>
-                  Delete Meal Plan
+              {/* Delete Button and share button*/}
+              <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 2 }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<ShareIcon />} // optional: remove if you don't want icon
+                  onClick={async () => {
+                    if (selectedMealPlan.shared) return;
+
+                    const token = localStorage.getItem("token");
+                    try {
+                      await axios.put(
+                        `http://localhost:8080/api/meal-plans/share/${selectedMealPlan.mealPlanId}`,
+                        {},
+                        {
+                          headers: { Authorization: `Bearer ${token}` },
+                        }
+                      );
+
+                      setSelectedMealPlan((prev) => ({
+                        ...prev,
+                        shared: true,
+                      }));
+
+                      setMessage("Meal Plan added to Social Feed!");
+                      setMessageType("success");
+                      setOpenSnackbar(true);
+                    } catch (err) {
+                      console.error(err);
+                      setMessage("❌ Failed to share meal plan.");
+                      setMessageType("error");
+                      setOpenSnackbar(true);
+                    }
+                  }}
+                  disabled={selectedMealPlan.shared}
+                  sx={{
+                    mb: 2,
+                    color: '#8dbf6a',
+                    backgroundColor: 'white',
+                    border: '1px solid #8dbf6a',
+                    fontWeight: 'bold',
+                    borderRadius: '12px', // smoother curve
+                    px: 3, // padding left and right
+                    py: 1.5, // padding top and bottom
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#f0f5eb',
+                      transform: 'scale(1.05)', // slight grow on hover
+                    },
+                    '&:disabled': {
+                      color: '#ccc',
+                      borderColor: '#ccc',
+                      backgroundColor: '#f9f9f9',
+                      cursor: 'default',
+                      transform: 'none',
+                    },
+                  }}
+                >
+                  {selectedMealPlan.shared ? "s Shared" : "Share Meal Plan"}
                 </Button>
+
+
+
+               <Button
+                 onClick={async () => {
+                   if (!selectedMealPlan) return;
+                   await deleteMealPlan();
+                   setMessage("Meal Plan deleted successfully.");
+                   setMessageType("success");
+                   setOpenSnackbar(true);
+                 }}
+                 startIcon={<DeleteOutlineIcon />}
+                 sx={{
+                   mb: 2,
+                   color: '#d32f2f',
+                   backgroundColor: 'white',
+                   border: '1px solid #d32f2f',
+                   '&:hover': {
+                     backgroundColor: '#fbe9e7',
+                   },
+                 }}
+               >
+                 Delete Meal Plan
+               </Button>
+
               </Box>
-            </Box>
+
+              </Box>
+
           </Modal>
         )}
       </Container>
+      <Snackbar
+              open={openSnackbar}
+              autoHideDuration={4000}
+              onClose={() => setOpenSnackbar(false)}
+              TransitionComponent={(props) => <Slide {...props} direction="up" />}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+              <Alert
+                onClose={() => setOpenSnackbar(false)}
+                severity={messageType} // Use messageType
+                sx={{ width: '100%' }}
+              >
+                {message} {/* Use message */}
+              </Alert>
+            </Snackbar>
+
     </Box>
   );
 };

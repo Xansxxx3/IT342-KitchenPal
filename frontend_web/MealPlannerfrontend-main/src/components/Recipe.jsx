@@ -17,6 +17,9 @@ import NavBar from '../components/NavBar'; // NavBar component
 import backgroundImage from '../assets/leafbg.png'; // Background image
 import { useLocation, Navigate } from 'react-router-dom';
 import axios from 'axios'; // Make sure axios is installed
+import Slide from '@mui/material/Slide';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const Recipe = () => {
   const location = useLocation();
@@ -338,27 +341,77 @@ const Recipe = () => {
             </Box>
 
             {/* Action Buttons */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-around', mt: 3 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: 3,
+                mt: 4,
+              }}
+            >
               <Button
                 variant="contained"
+                startIcon={
+                  <RestaurantMenuIcon
+                    sx={{
+                      fontSize: '1.8rem',
+                      transition: 'transform 0.3s ease',
+                      '.MuiButton-root:hover &': {
+                        transform: 'rotate(-10deg) scale(1.1)',
+                      },
+                    }}
+                  />
+                }
                 sx={{
                   backgroundColor: '#A0D683',
                   color: '#fff',
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: 3,
+                  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
                     backgroundColor: '#8CC765',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
                   },
                 }}
                 onClick={handleAddToMealPlan}
               >
                 Add to Meal Plan
               </Button>
+
               <Button
                 variant="contained"
+                startIcon={
+                  <ShoppingCartIcon
+                    sx={{
+                      fontSize: '1.8rem',
+                      transition: 'transform 0.3s ease',
+                      '.MuiButton-root:hover &': {
+                        transform: 'rotate(10deg) scale(1.1)',
+                      },
+                    }}
+                  />
+                }
                 sx={{
                   backgroundColor: '#72BF78',
                   color: '#fff',
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: 3,
+                  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                  textTransform: 'none',
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    backgroundColor: '#D3EE98',
+                    backgroundColor: '#5E9F64',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
                   },
                 }}
                 onClick={handleAddToShoppingList}
@@ -366,6 +419,8 @@ const Recipe = () => {
                 Add to Shopping List
               </Button>
             </Box>
+
+
           </Box>
         </Modal>
       )}
@@ -375,15 +430,18 @@ const Recipe = () => {
         open={openSnackbar}
         autoHideDuration={4000}
         onClose={() => setOpenSnackbar(false)}
+        TransitionComponent={(props) => <Slide {...props} direction="up" />}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
-          severity={messageType}
+          severity={messageType} // Use messageType
           sx={{ width: '100%' }}
         >
-          {message}
+          {message} {/* Use message */}
         </Alert>
       </Snackbar>
+
     </Box>
   );
 };
