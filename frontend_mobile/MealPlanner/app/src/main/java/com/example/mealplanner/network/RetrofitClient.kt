@@ -1,6 +1,5 @@
 package com.example.mealplanner.network
 
-import com.example.mealplanner.network.ApiService.RecipeApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
@@ -22,13 +21,6 @@ object RetrofitClient {
             .build()
             .create(ApiService::class.java)
     }
-    object RetrofitInstance {
-        val api: RecipeApi by lazy {
-            Retrofit.Builder()
-                .baseUrl(BASE_URL) // include trailing slash
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(RecipeApi::class.java)
-        }
+
     }
-    }
+
