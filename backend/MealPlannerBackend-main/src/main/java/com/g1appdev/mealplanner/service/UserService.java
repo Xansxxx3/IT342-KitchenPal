@@ -14,8 +14,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 
 @Service
 public class UserService {
@@ -25,6 +29,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     // Update user profile (for admin and user)
     public void updateUserProfile(long userId, UserProfileDTO userProfileDTO) {
@@ -98,25 +105,18 @@ public class UserService {
 
     public String uploadProfileImage(Long userId, MultipartFile image) {
         try {
-            String fileName = "user-" + userId + "-" + image.getOriginalFilename();
-            Path uploadPath = Paths.get("uploads");
-
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = uploadResult.get("secure_url").toString();
 
             UserEntity user = userRepository.findById(userId)
                     .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 
-            user.setProfileImagePath("/uploads/" + fileName); // saves to DB
+            user.setProfileImagePath(imageUrl); // Save the image URL, not local path
             userRepository.save(user);
 
-            return fileName; // 👈 return the filename to the controller
+            return imageUrl;
         } catch (IOException e) {
-            throw new RuntimeException("Could not upload image: " + e.getMessage());
+            throw new RuntimeException("Could not upload image to Cloudinary: " + e.getMessage());
         }
     }
 
