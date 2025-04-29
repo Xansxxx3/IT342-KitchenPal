@@ -51,12 +51,13 @@ public class UserController {
     public ResponseEntity<Map<String, String>> uploadProfileImage(@AuthenticationPrincipal UserEntity user,
                                                                   @RequestParam("image") MultipartFile image) {
         try {
-            String fileName = userProfileService.uploadProfileImage(user.getUserId(), image);
+            String imageUrl = userProfileService.uploadProfileImage(user.getUserId(), image);
             Map<String, String> response = new HashMap<>();
-            response.put("fileName", fileName); // 👈 return key "fileName"
+            response.put("imageUrl", imageUrl); // return image URL instead of filename
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 }
