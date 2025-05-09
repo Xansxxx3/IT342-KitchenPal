@@ -168,8 +168,8 @@ const Recipe = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId: Number(userId),
           recipeId: Number(selectedRecipe.recipeId), 
+          userId: Number(userId),
         }),
       });
 
