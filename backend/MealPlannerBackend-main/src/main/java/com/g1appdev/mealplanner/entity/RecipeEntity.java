@@ -1,15 +1,20 @@
 package com.g1appdev.mealplanner.entity;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
@@ -27,7 +32,16 @@ public class RecipeEntity {
 
     private String title;
     private String description;
-    private String ingredients;
+
+    // Ingredients stored as a collection of strings
+    @ElementCollection
+    @CollectionTable(
+            name = "tblrecipe_ingredients",
+            joinColumns = @JoinColumn(name = "recipe_id")
+    )
+    @Column(name = "ingredient")
+    private List<String> ingredients = new ArrayList<>();
+
     private int prepTime;
     private String nutritionInfo;
     private String cuisineType;
@@ -41,23 +55,32 @@ public class RecipeEntity {
     private String imagePath;
 
     @Lob
-    private byte[] image; // Added image field for storing image data
+    private byte[] image;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "recipes")
-    private Set<ShoppingListItemsEntity> shoppingListItems;
+
+    @OneToMany(mappedBy = "recipe")
+    @JsonBackReference
+    private Set<ShoppingListItemEntity> shoppingListItems;
+
 
     public RecipeEntity() {
-        super();
+        // Default constructor
     }
 
-    // Updated Constructor
-    public RecipeEntity(int recipeId, String title, String description, String ingredients, int prepTime,
-            String nutritionInfo, String cuisineType, String mealType, double ratingsAverage, byte[] image,
-            String imagePath) {
-        super();
+    public RecipeEntity(int recipeId,
+                        String title,
+                        String description,
+                        List<String> ingredients,
+                        int prepTime,
+                        String nutritionInfo,
+                        String cuisineType,
+                        String mealType,
+                        double ratingsAverage,
+                        byte[] image,
+                        String imagePath) {
         this.recipeId = recipeId;
         this.title = title;
         this.description = description;
@@ -96,11 +119,11 @@ public class RecipeEntity {
         this.description = description;
     }
 
-    public String getIngredients() {
+    public List<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -168,21 +191,29 @@ public class RecipeEntity {
         return updatedAt;
     }
 
-    public Set<ShoppingListItemsEntity> getShoppingListItems() {
+    public List<MealplanEntity> getMealPlans() {
+        return mealPlans;
+    }
+
+    public void setMealPlans(List<MealplanEntity> mealPlans) {
+        this.mealPlans = mealPlans;
+    }
+
+    public Set<ShoppingListItemEntity> getShoppingListItems() {
         return shoppingListItems;
     }
 
-    public void setShoppingListItems(Set<ShoppingListItemsEntity> shoppingListItems) {
+    public void setShoppingListItems(Set<ShoppingListItemEntity> shoppingListItems) {
         this.shoppingListItems = shoppingListItems;
     }
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }
