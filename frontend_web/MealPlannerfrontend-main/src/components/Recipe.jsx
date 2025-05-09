@@ -161,15 +161,15 @@ const Recipe = () => {
 
       console.log('Adding to shopping list with:', { userId, recipeId: selectedRecipe.recipeId });
 
-      const response = await fetch('https://it342-kitchenpal.onrender.com/api/shopping-list/add-recipe/{recipeId}', {
+      const response = await fetch(`https://it342-kitchenpal.onrender.com/api/shopping-list/add-recipe/${selectedRecipe.recipeId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          recipeId: Number(selectedRecipe.recipeId), 
           userId: Number(userId),
+          recipeId: Number(selectedRecipe.recipeId),
         }),
       });
 
