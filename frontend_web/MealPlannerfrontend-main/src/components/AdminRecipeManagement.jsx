@@ -77,7 +77,11 @@ const AdminRecipeManagement = () => {
       const formData = new FormData();
       formData.append("title", newRecipe.title);
       formData.append("description", newRecipe.description);
-      formData.append("ingredients", newRecipe.ingredients);
+      newRecipe.ingredients
+        .split(",")
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+        .forEach(ing => formData.append("ingredients", ing));
       formData.append("prepTime", newRecipe.prepTime);
       formData.append("nutritionInfo", newRecipe.nutritionInfo);
       formData.append("cuisineType", newRecipe.cuisineType);
@@ -120,7 +124,11 @@ const AdminRecipeManagement = () => {
       const formData = new FormData();
       formData.append("title", updatedRecipe.title);
       formData.append("description", updatedRecipe.description);
-      formData.append("ingredients", updatedRecipe.ingredients);
+      updatedRecipe.ingredients
+        .split(",")
+        .map(s => s.trim())
+        .filter(s => s.length > 0)
+        .forEach(ing => formData.append("ingredients", ing));
       formData.append("prepTime", updatedRecipe.prepTime);
       formData.append("nutritionInfo", updatedRecipe.nutritionInfo);
       formData.append("cuisineType", updatedRecipe.cuisineType);
@@ -249,7 +257,12 @@ const AdminRecipeManagement = () => {
                   <TableCell>{recipe.recipeId}</TableCell>
                   <TableCell>{recipe.title}</TableCell>
                   <TableCell>{recipe.description}</TableCell>
-                  <TableCell>{recipe.ingredients}</TableCell>
+                  <TableCell>
+                    {Array.isArray(recipe.ingredients)
+                      ? recipe.ingredients.join(", ")
+                      : recipe.ingredients}
+                  </TableCell>
+
                   <TableCell>{recipe.prepTime} mins</TableCell>
                   <TableCell>{recipe.cuisineType}</TableCell>
                   <TableCell>{recipe.mealType}</TableCell>
