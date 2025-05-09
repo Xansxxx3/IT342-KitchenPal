@@ -293,19 +293,19 @@ const Recipe = () => {
                   objectFit: 'cover',
                 }}
               />
-              <Box sx={{ width: '60%', textAlign: 'left' }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
-                  {selectedRecipe.title}
-                </Typography>
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                  <strong>Ingredients:</strong>
-                </Typography>
-                <ul>
-                  {selectedRecipe.ingredients.split(',').map((item, index) => (
-                    <li key={index}>{item.trim()}</li>
-                  ))}
-                </ul>
-              </Box>
+<Box sx={{ width: '60%', textAlign: 'left' }}>
+  <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+    {selectedRecipe.title}
+  </Typography>
+  <Typography variant="h6" sx={{ mb: 2 }}>
+    <strong>Ingredients:</strong>
+  </Typography>
+  <ul>
+    {selectedRecipe.ingredients.map((ingredient, index) => (
+      <li key={index}>{ingredient}</li>
+    ))}
+  </ul>
+</Box>
             </Box>
 
             <Typography variant="h6" sx={{ mt: 3, textAlign: 'left' }}>

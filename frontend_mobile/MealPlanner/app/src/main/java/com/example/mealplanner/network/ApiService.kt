@@ -34,12 +34,13 @@ data class LoginResponse(
     val userId: String
 )
 
+
 data class Recipe(
     @SerializedName("recipeId")
     val id: Int,
     val title: String,
     val description: String,
-    val ingredients: String,
+    val ingredients: List<String>, // Important: now a list
     val prepTime: Int,
     val nutritionInfo: String,
     val cuisineType: String,
@@ -48,6 +49,10 @@ data class Recipe(
     val imagePath: String
 )
 data class MealPlanRequest(
+    val userId: String,
+    val recipe: Recipe
+)
+data class MealPlanAdd(
     val userId: String,
     val recipeId: Int
 )
@@ -78,6 +83,12 @@ interface ApiService {
         @Header("Authorization") token: String
     ): List<Recipe>
 
+
+    @GET("api/recipe/{id}")
+    suspend fun getRecipesByIds(
+        @Header("Authorization") token: String
+    )
+
     @GET("/api/shopping-list-items/allShoppingList")
     suspend fun getAllShoppingList(
         @Header("Authorization") token: String
@@ -86,8 +97,13 @@ interface ApiService {
     @POST("api/meal-plans/add")
     suspend fun addMealPlan(
         @Header("Authorization") token: String,
-        @Body request: MealPlanRequest
+        @Body request: MealPlanAdd
     )
+
+    @GET("api/meal-plans/all") // Adjust path if needed
+    suspend fun getAllMealPlans(
+        @Header("Authorization") token: String
+    ): List<MealPlanRequest>
 
 
 

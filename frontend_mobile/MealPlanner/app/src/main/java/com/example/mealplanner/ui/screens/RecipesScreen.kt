@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.mealplanner.R
+import com.example.mealplanner.network.MealPlanAdd
 import com.example.mealplanner.network.MealPlanRequest
 import com.example.mealplanner.network.Recipe
 import com.example.mealplanner.network.RetrofitClient
@@ -222,7 +223,7 @@ fun RecipesScreen(navHostController: NavHostController) {
                         selectedItem = index
                         when (index) {
                             0 -> navHostController.navigate("settings")
-                            1 -> navHostController.navigate("mealPlan")
+                            1 -> navHostController.navigate("meal plan")
                             2 -> navHostController.navigate("home")
                             3 -> navHostController.navigate("recipes")
                             4 -> navHostController.navigate("shopping")
@@ -241,6 +242,7 @@ fun RecipeDetailScreen(
 ) {
     BackHandler(enabled = true) { navHostController.popBackStack() }
 
+    var selectedItem by remember { mutableStateOf(3) } // Recipes index
     val context = LocalContext.current
     var recipe: Recipe? by remember { mutableStateOf<Recipe?>(null) }
     val sharedPref = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
@@ -324,7 +326,7 @@ fun RecipeDetailScreen(
                                 val userid = sharedPref.getString("user_id", null)
                                 println("Login Success in main: ${token}")
                                 println("Login Success in main: ${userid}")
-                                val request = MealPlanRequest(userid.toString(), recipeId)
+                                val request = MealPlanAdd(userid.toString(), recipeId)
                                 println("Login Success in main: ${request.recipeId}")
                                 println("Login Success in main: ${request.userId}")
                                 CoroutineScope(Dispatchers.IO).launch {
@@ -370,9 +372,18 @@ fun RecipeDetailScreen(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 Text(
-                    text = recipe?.ingredients ?: "",
-                    modifier = Modifier.padding(16.dp)
+                    text = "Ingredients:",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
+
+                recipe?.ingredients?.forEach { ingredient ->
+                    Text(
+                        text = "- $ingredient",
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
+                }
+
 
                 Text(
                     text = "Nutrition Info:",
@@ -410,12 +421,21 @@ fun RecipeDetailScreen(
                 Icons.Default.Favorite to "Recipes",
                 Icons.Default.ShoppingCart to "Shopping"
             )
-            items.forEach { (icon, _) ->
+            items.forEachIndexed { index, item ->
                 NavigationBarItem(
-                    icon = { Icon(icon, contentDescription = null) },
-                    label = { /* no label on detail */ Text("") },
-                    selected = false,
-                    onClick = { /* can disable or handle as needed */ }
+                    icon = { Icon(item.first, contentDescription = item.second) },
+                    label = { Text(item.second) },
+                    selected = selectedItem == index,
+                    onClick = {
+                        selectedItem = index
+                        when (index) {
+                            0 -> navHostController.navigate("settings")
+                            1 -> navHostController.navigate("meal plan")
+                            2 -> navHostController.navigate("home")
+                            3 -> navHostController.navigate("recipes")
+                            4 -> navHostController.navigate("shopping")
+                        }
+                    }
                 )
             }
         }
