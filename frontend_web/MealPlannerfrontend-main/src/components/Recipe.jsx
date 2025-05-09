@@ -169,7 +169,7 @@ const Recipe = () => {
         },
         body: JSON.stringify({
           userId: Number(userId),
-          recipeId: selectedRecipe.recipeId,
+          recipeId: Number(selectedRecipe.recipeId), 
         }),
       });
 
