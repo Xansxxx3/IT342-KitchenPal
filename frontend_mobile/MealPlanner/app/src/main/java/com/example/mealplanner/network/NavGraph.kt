@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.example.mealplanner.ui.screens.SignInScreen
 import com.example.mealplanner.ui.screens.SignUpScreen
 import com.example.mealplanner.ui.screens.HomeScreen
+import com.example.mealplanner.ui.screens.MealPlanDetailScreen
 import com.example.mealplanner.ui.screens.MealPlanScreen
 import com.example.mealplanner.ui.screens.RecipeDetailScreen
 import com.example.mealplanner.ui.screens.RecipesScreen
@@ -56,6 +57,11 @@ fun AppNavGraph(navController: NavHostController) {
         }
         composable("shopping") {
             ShoppingListScreen(navController) // This will be your shopping screen
+        }
+
+        composable("mealPlanDetail/{name}") { backStackEntry ->
+            val recipeName = backStackEntry.arguments?.getString("name") ?: ""
+            MealPlanDetailScreen(navController, recipeName = recipeName)
         }
 
 
