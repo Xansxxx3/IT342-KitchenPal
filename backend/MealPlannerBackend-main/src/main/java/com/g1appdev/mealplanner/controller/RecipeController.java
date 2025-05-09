@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.g1appdev.mealplanner.entity.RecipeEntity;
 import com.g1appdev.mealplanner.service.RecipeService;
 
@@ -33,12 +30,6 @@ public class RecipeController {
 
     @Autowired
     RecipeService rserve;
-    @Autowired
-    private Cloudinary cloudinary;
-
-    @Autowired
-    private ImageUploadController imageController;
-
 
     @PostMapping("/addrecipe")
     public ResponseEntity<RecipeEntity> postRecipe(
@@ -62,12 +53,13 @@ public class RecipeController {
             recipe.setMealType(mealType);
             recipe.setRatingsAverage(ratingsAverage);
 
-            if (image != null && !image.isEmpty()) {
-                Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
-                String imageUrl = uploadResult.get("secure_url").toString();
-                
-                recipe.setImagePath(imageUrl); 
+            if (image != null) {
+                String fileName = image.getOriginalFilename();
+                Path path = Paths.get("uploads/" + fileName);
+                Files.write(path, image.getBytes());
+                recipe.setImagePath(fileName); // Save only the filename
             }
+
             RecipeEntity savedRecipe = rserve.postRecipe(recipe);
             return new ResponseEntity<>(savedRecipe, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -99,11 +91,11 @@ public class RecipeController {
             recipe.setMealType(mealType);
             recipe.setRatingsAverage(ratingsAverage);
 
-            if (image != null && !image.isEmpty()) {
-                Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
-                String imageUrl = uploadResult.get("secure_url").toString();
-                
-                recipe.setImagePath(imageUrl); 
+            if (image != null) {
+                String fileName = image.getOriginalFilename();
+                Path path = Paths.get("uploads/" + fileName);
+                Files.write(path, image.getBytes());
+                recipe.setImagePath(fileName); // Save only the filename
             }
 
             RecipeEntity updatedRecipe = rserve.putRecipeDetails(id, recipe);
