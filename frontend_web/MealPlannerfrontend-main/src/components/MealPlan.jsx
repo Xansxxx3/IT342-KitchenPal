@@ -298,9 +298,13 @@
                         <strong>Ingredients:</strong>
                       </Typography>
                       <ul>
-                        {selectedMealPlan.recipe.ingredients.split(",").map((item, index) => (
-                          <li key={index}>{item.trim()}</li>
-                        ))}
+                        {Array.isArray(selectedMealPlan.recipe?.ingredients) ? (
+                          selectedMealPlan.recipe.ingredients.map((ingredient, index) => (
+                            <li key={index}>{ingredient.trim?.()}</li>
+                          ))
+                        ) : (
+                          <li>No ingredients available.</li>
+                        )}
                       </ul>
                     </Box>
                   </Box>
