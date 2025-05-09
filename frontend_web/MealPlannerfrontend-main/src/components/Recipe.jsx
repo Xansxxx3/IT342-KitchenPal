@@ -161,7 +161,7 @@ const Recipe = () => {
 
       console.log('Adding to shopping list with:', { userId, recipeId: selectedRecipe.recipeId });
 
-      const response = await fetch('https://it342-kitchenpal.onrender.com/api/shopping-list-items/add', {
+      const response = await fetch('https://it342-kitchenpal.onrender.com/api/shopping-list/add-recipe/{recipeId}', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
