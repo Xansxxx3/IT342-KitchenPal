@@ -35,7 +35,8 @@ public class RecipeController {
     public ResponseEntity<RecipeEntity> postRecipe(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("ingredients") String ingredients,
+            // Accept multiple ingredients as form-data fields: ingredients=one&ingredients=two
+            @RequestParam("ingredients") List<String> ingredients,
             @RequestParam("prepTime") int prepTime,
             @RequestParam("nutritionInfo") String nutritionInfo,
             @RequestParam("cuisineType") String cuisineType,
@@ -57,7 +58,7 @@ public class RecipeController {
                 String fileName = image.getOriginalFilename();
                 Path path = Paths.get("uploads/" + fileName);
                 Files.write(path, image.getBytes());
-                recipe.setImagePath(fileName); // Save only the filename
+                recipe.setImagePath(fileName);
             }
 
             RecipeEntity savedRecipe = rserve.postRecipe(recipe);
@@ -73,7 +74,7 @@ public class RecipeController {
             @PathVariable int id,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("ingredients") String ingredients,
+            @RequestParam("ingredients") List<String> ingredients,
             @RequestParam("prepTime") int prepTime,
             @RequestParam("nutritionInfo") String nutritionInfo,
             @RequestParam("cuisineType") String cuisineType,
@@ -81,7 +82,9 @@ public class RecipeController {
             @RequestParam("ratingsAverage") double ratingsAverage,
             @RequestParam(value = "image", required = false) MultipartFile image) {
         try {
-            RecipeEntity recipe = rserve.getRecipeById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
+            RecipeEntity recipe = rserve.getRecipeById(id)
+                    .orElseThrow(() -> new RuntimeException("Recipe not found"));
+
             recipe.setTitle(title);
             recipe.setDescription(description);
             recipe.setIngredients(ingredients);
@@ -95,7 +98,7 @@ public class RecipeController {
                 String fileName = image.getOriginalFilename();
                 Path path = Paths.get("uploads/" + fileName);
                 Files.write(path, image.getBytes());
-                recipe.setImagePath(fileName); // Save only the filename
+                recipe.setImagePath(fileName);
             }
 
             RecipeEntity updatedRecipe = rserve.putRecipeDetails(id, recipe);
