@@ -29,7 +29,7 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
-export default function ShoppingList() {
+function ShoppingList() {
   const navigate = useNavigate();
   const [items, setItems]         = useState([]);
   const [loading, setLoading]     = useState(true);
@@ -52,8 +52,8 @@ export default function ShoppingList() {
 
     const fetchList = async () => {
       try {
-        const resp = await axios.get(${API}/api/shopping-list, {
-          headers: { Authorization: Bearer ${token} },
+        const resp = await axios.get(`${API}/api/shopping-list`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (Array.isArray(resp.data)) {
           setItems(resp.data);
@@ -73,8 +73,8 @@ export default function ShoppingList() {
 
   const refresh = () =>
     axios
-      .get(${API}/api/shopping-list, {
-        headers: { Authorization: Bearer ${token} },
+      .get(`${API}/api/shopping-list`, {
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then(r => setItems(r.data))
       .catch(console.error);
@@ -101,9 +101,9 @@ export default function ShoppingList() {
   const toggleCheck = async (itm) => {
     try {
       await axios.put(
-        ${API}/api/shopping-list/item/${itm.id},
+        `${API}/api/shopping-list/item/${itm.id}`,
         { checked: !itm.checked },
-        { headers: { Authorization: Bearer ${token} } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       refresh();
     } catch {
@@ -116,13 +116,13 @@ export default function ShoppingList() {
   const updateField = async (id, field, val) => {
     try {
       await axios.put(
-        ${API}/api/shopping-list/item/${id},
+        `${API}/api/shopping-list/item/${id}`,
         { [field]: val },
-        { headers: { Authorization: Bearer ${token} } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       refresh();
     } catch {
-      setSnackbarMsg(Failed to update ${field});
+      setSnackbarMsg(`Failed to update ${field}`);
       setSnackbarType("error");
       setOpenSnackbar(true);
     }
@@ -130,8 +130,8 @@ export default function ShoppingList() {
 
   const clearChecked = async () => {
     try {
-      await axios.delete(${API}/api/shopping-list/clear-checked, {
-        headers: { Authorization: Bearer ${token} },
+      await axios.delete(`${API}/api/shopping-list/clear-checked`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       refresh();
       setSnackbarMsg("Cleared all checked items");
@@ -169,9 +169,9 @@ const handleToggleCheck = async (itm) => {
   }));
   try {
     await axios.put(
-      ${API}/api/shopping-list/item/${itm.id},
+      `${API}/api/shopping-list/item/${itm.id}`,
       { checked: !itm.checked },
-      { headers: { Authorization: Bearer ${token} } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     setSnackbarMsg("Successfully Checked Ingredient");
     setSnackbarType("success");
@@ -193,15 +193,15 @@ const handleSaveField = async (itm, field, val) => {
   }));
   try {
     await axios.put(
-      ${API}/api/shopping-list/item/${itm.id},
+      `${API}/api/shopping-list/item/${itm.id}`,
       { [field]: val },
-      { headers: { Authorization: Bearer ${token} } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
-    setSnackbarMsg(${field} successfully changed);
+    setSnackbarMsg(`${field} successfully changed`);
     setSnackbarType("success");
     setOpenSnackbar(true);
   } catch {
-    setSnackbarMsg(Failed to save ${field});
+    setSnackbarMsg(`Failed to save ${field}`);
     setSnackbarType("error");
     setOpenSnackbar(true);
   }
@@ -209,7 +209,7 @@ const handleSaveField = async (itm, field, val) => {
   return (
     <Box
           sx={{
-            backgroundImage: url(${backgroundImage}),
+            backgroundImage: `url(${backgroundImage})`,
             backgroundSize: 'cover', // Ensures the image covers the entire container
             backgroundRepeat: 'no-repeat', // Prevents the image from repeating
             backgroundPosition: 'center', // Centers the image
@@ -466,3 +466,4 @@ const handleSaveField = async (itm, field, val) => {
     </Box>
   );
 }
+export default ShoppingList;
